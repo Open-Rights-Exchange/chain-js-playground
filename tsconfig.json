@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es5",
+    "jsx": "react",
+    "allowJs": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@open-rights-exchange/chainjs": ["../chain-js/src"],
+      "*": ["../chain-js/src/@customTypes/*"],
+    },
+    "allowSyntheticDefaultImports" : true,
+    "downlevelIteration" : true,
+    "composite": true,
+    "skipLibCheck": true,
+    "rootDirs": ["src", "../chain-js/src"],    
+  },"references": [
+    {"path": "../chain-js"}
+  ]
+}
