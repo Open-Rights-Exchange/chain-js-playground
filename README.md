@@ -9,13 +9,6 @@ This project is intended to:
 
 ## Playing with Chain JS
 
-<!--#
-NOUN=mother
-ATTRIBUTION=Mark Wahlberg
-$-->
-
-"Say hi to your {{ NOUN }} for me," {{ ATTRIBUTION }}
-
 1. clone this project 
 
 ```
