@@ -1,7 +1,24 @@
 const path = require('path');
+const { env } = require('process');
 
-module.exports = {
-  entry: './src/index.ts',
+
+
+
+
+
+module.exports = (env, argv) => {
+
+  var local_chainjs_alias = function() {
+    if(env.use_local_chainjs_code_NOT_npm == 'true') {
+      return {
+        "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"), 
+      }
+    } else {
+      return {}
+    }
+  }();
+
+  return {entry: './src/index.ts',
   module: {
     rules: [
       {
@@ -18,14 +35,11 @@ module.exports = {
     ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js'],
-    alias: {
-      "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"),
-    },
+    extensions: ['.tsx', '.ts', '.js', '.json'],
+    alias: local_chainjs_alias,
     fallback: {
       "./package": false,
       "electron": false,
-      "it": false,
       "expect":false,
       "os": require.resolve("os-browserify/browser")
     },
@@ -36,4 +50,5 @@ module.exports = {
   },
   target: ["node"],
   mode: 'development'
+}
 };

@@ -16,6 +16,7 @@
     "composite": true,
     "skipLibCheck": true,
     "rootDirs": ["src", "../chain-js/src"],    
+    "resolveJsonModule": true
   },"references": [
     {"path": "../chain-js"}
   ]
