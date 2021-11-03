@@ -8,6 +8,11 @@ const { env } = require('process');
 
 module.exports = (env, argv) => {
 
+  // This function creates an object which is then used in the webpack config 
+  // when the env variable "use_local_chainjs_code_NOT_npm" is set, 
+  // webpack will look to get it's source code from ../chain-js/dist/src
+  // becasue ts-loader has options: {projectReferences: true} set, 
+  // it will rebuild the chainjs source and output to  ../chain-js/dist/src before webpack creates the final bundle
   var local_chainjs_alias = function() {
     if(env.use_local_chainjs_code_NOT_npm == 'true') {
       return {
