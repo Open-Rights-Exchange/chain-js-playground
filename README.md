@@ -12,7 +12,7 @@ This project is intended to:
 1. clone this project 
 
 ```
-git clone git@github.com-codeoflight:CodeOfLight/chain-js-playground.git
+git clone https://github.com/Open-Rights-Exchange/chain-js-playground.git
 ```
 
 2. Modify the "src/index.ts"
@@ -40,7 +40,7 @@ mkdir chain-js-root
 cd chain-js-root
 git clone https://github.com/Open-Rights-Exchange/chain-js.git
 npm --prefix ./chain-js install
-git clone git@github.com-codeoflight:CodeOfLight/chain-js-playground.git
+git clone https://github.com/Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
 npm run debug
