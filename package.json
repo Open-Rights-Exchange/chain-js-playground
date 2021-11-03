@@ -1,3 +1,4 @@
+
 {
   "name": "chain-js-playground",
   "version": "1.0.0",
@@ -17,8 +18,10 @@
     "ts-node": "^10.4.0"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.2",
     "ts-loader": "^9.2.6",
     "typescript": "^4.4.4",
     "webpack-cli": "^4.9.1"
-  }
+  },
+  "_comment": "@types/jest - Even though we don't need this in this package. If you don't have this you'll get errors when the chainjs library is referenced - not sure why at this point"
 }
