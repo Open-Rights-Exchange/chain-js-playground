@@ -34,8 +34,12 @@ module.exports = (env, argv) => {
           }],
         exclude: [
           /node_modules/
-        ],
-        
+        ],        
+      },
+      {
+        test: /\.js$/,
+        enforce: "pre",
+        use: ["source-map-loader"],
       },
     ],
   },
@@ -52,7 +56,9 @@ module.exports = (env, argv) => {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    devtoolModuleFilenameTemplate: '[absolute-resource-path]'
   },
+  devtool: 'cheap-module-source-map',
   target: ["node"],
   mode: 'development'
 }

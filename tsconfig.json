@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/",
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "commonjs",
     "target": "es5",
     "jsx": "react",
     "allowJs": true,
@@ -16,7 +16,8 @@
     "composite": true,
     "skipLibCheck": true,
     "rootDirs": ["src", "../chain-js/src"],    
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "baseUrl": "."
   },"references": [
     {"path": "../chain-js"}
   ]

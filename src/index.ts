@@ -17,16 +17,15 @@ async function runTxn() {
 
         console.log(chain.isConnected);
         await chain.connect()
-    /*
+
         var sendTokenTx = await chain.new.Transaction()
-        var action = await chain.composeAction(Models.ChainActionType.TokenTransfer, {
+        await chain.composeAction(Models.ChainActionType.TokenTransfer, {
             to: 'codeoflight2',
             contractAddress: 'eosio.token', 
             amount: '0.0001'
-         });
+         });    
+        //sendTokenTx.actions = [action]
     
-        sendTokenTx.actions = [action]
-    */
         console.log(chain.isConnected);
 
     } catch(error) {
