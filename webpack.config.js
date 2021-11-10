@@ -1,11 +1,6 @@
 const path = require('path');
 const { env } = require('process');
 
-
-
-
-
-
 module.exports = (env, argv) => {
 
   // This function creates an object which is then used in the webpack config 
