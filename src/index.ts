@@ -1,15 +1,11 @@
 import { ChainFactory,  Models, ChainType, HelpersEos } from '@open-rights-exchange/chainjs'
-
+import secret from './secrets.config'
 
 var jungleEndpoints : Models.ChainEndpoint[] = [{url : "https://jungle3.cryptolions.io:443"}];
 var chainSettings: any = {};
 
  /** Using chain-specifc features - ex. eosjs */
  const chain = new ChainFactory().create(ChainType.EosV2, jungleEndpoints, chainSettings)
-
-
-let message: string = 'Hello, World!';
-console.log(message);
 
 async function runTxn() {
 
@@ -20,7 +16,6 @@ async function runTxn() {
         await chain.connect()
 
         var sendTokenTx = await chain.new.Transaction()
-
         var action = await chain.composeAction(Models.ChainActionType.TokenTransfer,
             {            
                fromAccountName : 'codeoflight1',
@@ -30,22 +25,24 @@ async function runTxn() {
                memo: 'Test',
                permission: HelpersEos.toEosEntityName('active')
              });
-   
-           //var actions : Models.EosActionStruct[] = n
-   
            sendTokenTx.actions = [action];
            
            await sendTokenTx.prepareToBeSigned()
            await sendTokenTx.validate()
-           //await sendTokenTx.addSignatures()
+           await sendTokenTx.sign([secret.JungleKey]);
 
+           var result :  Models.TransactionResult =  await sendTokenTx.send();
+
+           console.log('transactionId:', result.transactionId)
            console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
            console.log('actions:', JSON.stringify(sendTokenTx.actions))
            console.log('header:', sendTokenTx.header)
            console.log('signatures:', sendTokenTx.signatures)
 
     } catch(error) {
+
         console.log("There was an error: " + error);
+
     }
 
 }

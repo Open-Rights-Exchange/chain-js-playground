@@ -19,7 +19,9 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../chain-js/**",
                 "!**/node_modules/**"
-            ]
+            ],
+            "smartStep": true,
+            //"console": "internalConsole"
         },        
         {
             "name": "Run Webpack Bundle",

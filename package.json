@@ -1,4 +1,3 @@
-
 {
   "name": "chain-js-playground",
   "version": "1.0.0",
@@ -8,26 +7,27 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "npm run webpack_build_from_local_source && node -r source-map-support/register dist/bundle.js",
     "start": "npm run webpack_build_from_npm_in_node_modules && node -r source-map-support/register dist/bundle.js",
-    "webpack_build_from_local_source" : "npx webpack build --env use_local_chainjs_code_NOT_npm=true --config ./webpack.config.js",
-    "webpack_build_from_npm_in_node_modules" : "npx webpack build --config ./webpack.config.js"
+    "webpack_build_from_local_source": "npx webpack build --env use_local_chainjs_code_NOT_npm=true --config ./webpack.config.js",
+    "webpack_build_from_npm_in_node_modules": "npx webpack build --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@open-rights-exchange/chainjs": "^3.2.6",
+    "dotenv": "^10.0.0",
     "os-browserify": "^0.3.0",
     "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
-    "ts-loader": "^9.2.6",
-    "typescript": "^4.4.4",
-    "webpack-cli": "^4.9.1",
     "source-map-loader": "^3.0.0",
     "source-map-support": "^0.5.20",
+    "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
-    "tsconfig-paths": "^3.11.0"
+    "tsconfig-paths": "^3.11.0",
+    "typescript": "^4.4.4",
+    "webpack-cli": "^4.9.1"
   },
   "_comment": "@types/jest - Even though we don't need this in this package. If you don't have this you'll get errors when the chainjs library is referenced - not sure why at this point"
 }
