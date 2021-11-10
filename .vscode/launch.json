@@ -10,16 +10,27 @@
             "name": "Debug via ts-node",
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
-                "${workspaceRoot}/../chainjs/**/*.js"
+                "${workspaceRoot}/../chain-js/**/*.js"
             ],
             "runtimeArgs": ["--nolazy", "-r", "tsconfig-paths/register", "-r", "ts-node/register/transpile-only"],
             "args": ["src/index.ts"],
             "cwd": "${workspaceRoot}",
             "resolveSourceMapLocations": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/../chainjs/**",
+                "${workspaceFolder}/../chain-js/**",
                 "!**/node_modules/**"
             ]
-        },
+        },        
+        {
+            "name": "Run Webpack Bundle",
+            "program": "${workspaceFolder}/dist/bundle.js",
+            "request": "launch",
+            "skipFiles": [
+                "<node_internals>/**",
+                "<node_internals>/**/*.js"
+            ],
+            "type": "pwa-node",
+            "preLaunchTask": "npm: webpack_build_from_local_source"
+        }
     ]
 }

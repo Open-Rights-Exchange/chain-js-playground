@@ -6,8 +6,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "npx webpack build --env use_local_chainjs_code_NOT_npm=true --config ./webpack.config.js && node -r source-map-support/register dist/bundle.js",
-    "start": "npx webpack build --config ./webpack.config.js && node dist/bundle.js"
+    "debug": "npm run webpack_build_from_local_source && node -r source-map-support/register dist/bundle.js",
+    "start": "npm run webpack_build_from_npm_in_node_modules && node -r source-map-support/register dist/bundle.js",
+    "webpack_build_from_local_source" : "npx webpack build --env use_local_chainjs_code_NOT_npm=true --config ./webpack.config.js",
+    "webpack_build_from_npm_in_node_modules" : "npx webpack build --config ./webpack.config.js"
   },
   "keywords": [],
   "author": "",

@@ -9,13 +9,11 @@
     "moduleResolution": "node",
     "paths": {
       "@open-rights-exchange/chainjs": ["../chain-js/src"],
-      "*": ["../chain-js/src/@customTypes/*"],
     },
     "allowSyntheticDefaultImports" : true,
     "downlevelIteration" : true,
     "composite": true,
-    "skipLibCheck": true,
-    "rootDirs": ["src", "../chain-js/src"],    
+    "skipLibCheck": true,   
     "resolveJsonModule": true,
     "baseUrl": "."
   },"references": [
