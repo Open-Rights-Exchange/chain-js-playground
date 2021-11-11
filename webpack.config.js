@@ -42,10 +42,7 @@ module.exports = (env, argv) => {
     extensions: ['.tsx', '.ts', '.js', '.json'],
     alias: local_chainjs_alias,
     fallback: {
-      "./package": false,
-      "electron": false,
-      "expect":false,
-      "os": require.resolve("os-browserify/browser")
+        "electron": false,
     },
   },
   output: {

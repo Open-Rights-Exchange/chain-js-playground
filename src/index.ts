@@ -4,13 +4,12 @@ import secret from './secrets.config'
 var jungleEndpoints : Models.ChainEndpoint[] = [{url : "https://jungle3.cryptolions.io:443"}];
 var chainSettings: any = {};
 
- /** Using chain-specifc features - ex. eosjs */
- const chain = new ChainFactory().create(ChainType.EosV2, jungleEndpoints, chainSettings)
+/** Using chain-specifc features - ex. eosjs */
+const chain = new ChainFactory().create(ChainType.EosV2, jungleEndpoints, chainSettings)
 
 async function runTxn() {
 
     try {
-
 
         console.log(chain.isConnected);
         await chain.connect()
@@ -31,9 +30,9 @@ async function runTxn() {
            await sendTokenTx.validate()
            await sendTokenTx.sign([secret.JungleKey]);
 
-           var result :  Models.TransactionResult =  await sendTokenTx.send();
+           //var result :  Models.TransactionResult =  await sendTokenTx.send();
 
-           console.log('transactionId:', result.transactionId)
+           //console.log('transactionId:', result.transactionId)
            console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
            console.log('actions:', JSON.stringify(sendTokenTx.actions))
            console.log('header:', sendTokenTx.header)
