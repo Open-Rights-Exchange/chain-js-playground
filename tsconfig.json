@@ -9,6 +9,7 @@
     "moduleResolution": "node",
     "paths": {
       "@open-rights-exchange/chainjs": ["../chain-js/src"],
+      "@open-rights-exchange/chainjs-plugin-eos" : ["../chain-js-plugin-eos/src"]
     },
     "allowSyntheticDefaultImports" : true,
     "downlevelIteration" : true,
@@ -17,6 +18,7 @@
     "resolveJsonModule": true,
     "baseUrl": "."
   },"references": [
-    {"path": "../chain-js"}
+    {"path": "../chain-js"},
+    {"path": "../chain-js-plugin-eos"}
   ]
 }

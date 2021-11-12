@@ -10,7 +10,8 @@
             "name": "Debug via ts-node",
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
-                "${workspaceRoot}/../chain-js/**/*.js"
+                "${workspaceRoot}/../chain-js/**/*.js",
+                "${workspaceRoot}/../chain-js-plugin-eos/**/*.js"
             ],
             "runtimeArgs": ["--nolazy", "-r", "tsconfig-paths/register", "-r", "ts-node/register/transpile-only"],
             "args": ["src/index.ts"],
@@ -18,6 +19,7 @@
             "resolveSourceMapLocations": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../chain-js/**",
+                "${workspaceRoot}/../chain-js-plugin-eos/**",
                 "!**/node_modules/**"
             ],
             "smartStep": true,

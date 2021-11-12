@@ -1,11 +1,13 @@
-import { ChainFactory,  Models, ChainType, HelpersEos } from '@open-rights-exchange/chainjs'
+import { PluginChainFactory,  Models, ChainType } from '@open-rights-exchange/chainjs'
+import { HelpersEos, Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
 import secret from './secrets.config'
+
 
 var jungleEndpoints : Models.ChainEndpoint[] = [{url : "https://jungle3.cryptolions.io:443"}];
 var chainSettings: any = {};
 
-/** Using chain-specifc features - ex. eosjs */
-const chain = new ChainFactory().create(ChainType.EosV2, jungleEndpoints, chainSettings)
+
+var chain = PluginChainFactory([EOSPlugin], ChainType.EosV2,jungleEndpoints, chainSettings);
 
 async function runTxn() {
 

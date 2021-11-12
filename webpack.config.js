@@ -12,6 +12,7 @@ module.exports = (env, argv) => {
     if(env.use_local_chainjs_code_NOT_npm == 'true') {
       return {
         "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"), 
+        "@open-rights-exchange/chainjs-plugin-eos'": path.resolve(__dirname, "../chain-js-plugin-eos/dist/src"), 
       }
     } else {
       return {}
@@ -40,7 +41,10 @@ module.exports = (env, argv) => {
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.json'],
-    alias: local_chainjs_alias,
+    alias: {
+       "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"),
+       "@open-rights-exchange/chainjs-plugin-eos": path.resolve(__dirname, "../chain-js-plugin-eos/dist/src")
+      },
     fallback: {
         "electron": false,
     },
