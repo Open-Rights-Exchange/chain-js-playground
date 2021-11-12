@@ -38,9 +38,11 @@ The bellow instructions should create a structure that looks as above
 ```
 mkdir chain-js-root
 cd chain-js-root
-git clone https://github.com/Open-Rights-Exchange/chain-js.git
+git clone --branch plugin-breakout https://github.com/Open-Rights-Exchange/chain-js.git
 npm --prefix ./chain-js install
-git clone https://github.com/Open-Rights-Exchange/chain-js-playground.git
+git clone https://github.com/Open-Rights-Exchange/chain-js-plugin-eos.git
+npm --prefix ./chain-js-plugin-eos install
+git clone  --branch plugin-breakout https://github.com/Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
 npm run debug
