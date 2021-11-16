@@ -1,13 +1,37 @@
-import { PluginChainFactory,  Models, ChainType } from '@open-rights-exchange/chainjs'
-import { HelpersEos, Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
-import secret from './secrets.config'
+import config from './chain.config'
+import { Models } from '@open-rights-exchange/chainjs'
 
 
-var jungleEndpoints : Models.ChainEndpoint[] = [{url : "https://jungle3.cryptolions.io:443"}];
-var chainSettings: any = {};
+// var configObj = config.eth.ropsten
+var configObj = config.eos.jungle
+
+var chainType = configObj.chainType;
+var endpoints : Models.ChainEndpoint[] = configObj.endpoints
+var chainSettings: any = configObj.chainSettings
+var fromAccountName = configObj.fromAccountName
+var toAccountName = configObj.toAccountName
+var symbol = configObj.symbol
+var permission = configObj.permission
+var privateKeys = configObj.privateKeys
+var transferAmount = configObj.transferAmount
+var precision = configObj.precision
+
+/*
+-- To us the current chain-js design (without plugins), uncomment the below 
+-- Note that HelpersEos is loaded from chain-js - this needs to be loaded from the plugin when using the plugin model.
+*/
+// import { ChainFactory } from '@open-rights-exchange/chainjs'
+// var chain  = new ChainFactory().create(chainType,endpoints, chainSettings);
 
 
-var chain = PluginChainFactory([EOSPlugin], ChainType.EosV2,jungleEndpoints, chainSettings);
+/*
+-- The new plugin model implements a PluginChainFactory which should be used insted of ChainFactory
+-- Uncomment the below two lines to use the plugin model
+-- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
+*/
+ import { PluginChainFactory } from '@open-rights-exchange/chainjs'
+ import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
+ var chain = PluginChainFactory([EOSPlugin], chainType,endpoints, chainSettings);
 
 async function runTxn() {
 
@@ -17,38 +41,41 @@ async function runTxn() {
         await chain.connect()
 
         var sendTokenTx = await chain.new.Transaction()
-        var action = await chain.composeAction(Models.ChainActionType.TokenTransfer,
+        var action = await chain.composeAction(Models.ChainActionType.ValueTransfer,
             {            
-               fromAccountName : 'codeoflight1',
-               toAccountName: 'codeoflight2',
-               amount: '0.0001',
-               symbol: 'EOS',
+               fromAccountName : fromAccountName,
+               toAccountName: toAccountName,
+               amount: transferAmount,
+               symbol: symbol,
                memo: 'Test',
-               permission: HelpersEos.toEosEntityName('active')
+               permission: permission,
+               precision: precision               
              });
-           sendTokenTx.actions = [action];
-           
-           await sendTokenTx.prepareToBeSigned()
-           await sendTokenTx.validate()
-           await sendTokenTx.sign([secret.JungleKey]);
+             
+        sendTokenTx.actions = [action];
+        
+        await sendTokenTx.prepareToBeSigned()
+        await sendTokenTx.validate()
+        await sendTokenTx.sign(privateKeys);
 
-           //var result :  Models.TransactionResult =  await sendTokenTx.send();
+        var result :  Models.TransactionResult =  await sendTokenTx.send();
 
-           //console.log('transactionId:', result.transactionId)
-           console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
-           console.log('actions:', JSON.stringify(sendTokenTx.actions))
-           console.log('header:', sendTokenTx.header)
-           console.log('signatures:', sendTokenTx.signatures)
+        console.log('transactionId:', result.transactionId)
+        console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
+        console.log('actions:', JSON.stringify(sendTokenTx.actions))
+        console.log('header:', sendTokenTx.header)
+        console.log('signatures:', sendTokenTx.signatures)
 
     } catch(error) {
-
         console.log("There was an error: " + error);
-
     }
 
 }
 
-runTxn()
+if(chain) {
+    runTxn()
+}
+    
 
 
 

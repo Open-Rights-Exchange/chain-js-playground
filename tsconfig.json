@@ -16,7 +16,8 @@
     "composite": true,
     "skipLibCheck": true,   
     "resolveJsonModule": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "esModuleInterop": true
   },"references": [
     {"path": "../chain-js"},
     {"path": "../chain-js-plugin-eos"}
