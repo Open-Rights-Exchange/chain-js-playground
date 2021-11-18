@@ -9,7 +9,8 @@
     "moduleResolution": "node",
     "paths": {
       "@open-rights-exchange/chainjs": ["../chain-js/src"],
-      "@open-rights-exchange/chainjs-plugin-eos" : ["../chain-js-plugin-eos/src"]
+      "@open-rights-exchange/chainjs-plugin-eos" : ["../chain-js-plugin-eos/src"],
+      "@open-rights-exchange/chainjs-plugin-eth" : ["../chain-js-plugin-ethereum/src"]
     },
     "allowSyntheticDefaultImports" : true,
     "downlevelIteration" : true,
@@ -20,6 +21,7 @@
     "esModuleInterop": true
   },"references": [
     {"path": "../chain-js"},
-    {"path": "../chain-js-plugin-eos"}
+    {"path": "../chain-js-plugin-eos"},
+    {"path": "../chain-js-plugin-ethereum"}
   ]
 }

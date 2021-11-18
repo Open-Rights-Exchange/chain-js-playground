@@ -11,7 +11,8 @@
             "outFiles": [
                 "${workspaceFolder}/**/*.js",
                 "${workspaceRoot}/../chain-js/**/*.js",
-                "${workspaceRoot}/../chain-js-plugin-eos/**/*.js"
+                "${workspaceRoot}/../chain-js-plugin-eos/**/*.js",
+                "${workspaceRoot}/../chain-js-plugin-ethereum/**/*.js",
             ],
             "runtimeArgs": ["--nolazy", "-r", "tsconfig-paths/register", "-r", "ts-node/register/transpile-only"],
             "args": ["src/index.ts"],
@@ -20,6 +21,7 @@
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/../chain-js/**",
                 "${workspaceRoot}/../chain-js-plugin-eos/**",
+                "${workspaceRoot}/../chain-js-plugin-ethereum/**",
                 "!**/node_modules/**"
             ],
             "smartStep": true,

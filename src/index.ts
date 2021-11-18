@@ -2,8 +2,8 @@ import config from './chain.config'
 import { Models } from '@open-rights-exchange/chainjs'
 
 
-// var configObj = config.eth.ropsten
-var configObj = config.eos.jungle
+var configObj = config.eth.ropsten
+//var configObj = config.eos.jungle
 
 var chainType = configObj.chainType;
 var endpoints : Models.ChainEndpoint[] = configObj.endpoints
@@ -18,7 +18,6 @@ var precision = configObj.precision
 
 /*
 -- To us the current chain-js design (without plugins), uncomment the below 
--- Note that HelpersEos is loaded from chain-js - this needs to be loaded from the plugin when using the plugin model.
 */
 // import { ChainFactory } from '@open-rights-exchange/chainjs'
 // var chain  = new ChainFactory().create(chainType,endpoints, chainSettings);
@@ -31,7 +30,8 @@ var precision = configObj.precision
 */
  import { PluginChainFactory } from '@open-rights-exchange/chainjs'
  import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
- var chain = PluginChainFactory([EOSPlugin], chainType,endpoints, chainSettings);
+ import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-eth'
+ var chain = PluginChainFactory([EOSPlugin, EthereumPlugin], chainType,endpoints, chainSettings);
 
 async function runTxn() {
 
@@ -58,9 +58,9 @@ async function runTxn() {
         await sendTokenTx.validate()
         await sendTokenTx.sign(privateKeys);
 
-        var result :  Models.TransactionResult =  await sendTokenTx.send();
+        //var result :  Models.TransactionResult =  await sendTokenTx.send();
 
-        console.log('transactionId:', result.transactionId)
+        //console.log('transactionId:', result.transactionId)
         console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
         console.log('actions:', JSON.stringify(sendTokenTx.actions))
         console.log('header:', sendTokenTx.header)

@@ -1,6 +1,19 @@
-import { Models, HelpersEthereum, ModelsEthereum} from '@open-rights-exchange/chainjs'
 import { ChainEntityNameBrand } from '../../chain-js/src/models';
+
+
+/*
+-- To us the current chain-js design (without plugins), uncomment the below 
+-- Note that HelpersEos, HelpersEthereum, ModelsEthereum is loaded from chain-js - this needs to be loaded from the plugin when using the plugin model.
+*/
+// import { Models, HelpersEos, HelpersEthereum, ModelsEthereum  } from '@open-rights-exchange/chainjs'
+
+/*
+-- Uncomment the below two lines to use the plugin model
+-- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
+*/
+import { Models } from '@open-rights-exchange/chainjs'
 import { HelpersEos } from '@open-rights-exchange/chainjs-plugin-eos'
+import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chainjs-plugin-eth'
 
 export interface IChainSettings {
     [chainId: string] : 
