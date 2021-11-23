@@ -49,8 +49,21 @@ npm --prefix ./chain-js-plugin-algorand install
 git clone  --branch plugin-breakout git@github.com-codeoflight:Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
-npm run start
+npm run debug
 ```
+
+## Configuration
+
+The following Environment variables are used to provide sensitive information
+```
+export JUNGLE_KEY=XXXX #EOS Jungle3 Private Key 
+export ROPSTEN_KEY=XXXX #Ethereum Ropsten Private Key
+export ALGORAND_KEY=XXXX #Algorand Private Key in Hex Format - use this tool to convert your seed phrase to the format required https://github.com/Open-Rights-Exchange/algorand-seed-to-hex
+export ALGORAND_API_KEY=XXXXX  #This is the API Key from https://developer.purestake.io/
+```
+
+All other config options can be found in "chain.config.ts" 
+
 
 ## Notes
 
