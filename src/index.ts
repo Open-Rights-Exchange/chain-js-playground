@@ -78,10 +78,3 @@ async function runTxn() {
 if(chain) {
     runTxn()
 }
-    
-
-// (Typescript) cast generic chain to EOS chain object
-//const eosChain = (myChain as ChainEosV2) // EOSIO node version 2.x
-//eosChain.eosjs.api.transact();
- // xhr2-cookies requires polyfills
- 
