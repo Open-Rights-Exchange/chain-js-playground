@@ -42,6 +42,10 @@ git clone --branch plugin-breakout https://github.com/Open-Rights-Exchange/chain
 npm --prefix ./chain-js install
 git clone https://github.com/Open-Rights-Exchange/chain-js-plugin-eos.git
 npm --prefix ./chain-js-plugin-eos install
+git clone https://github.com/Open-Rights-Exchange/chain-js-plugin-ethereum.git
+npm --prefix ./chain-js-plugin-ethereum install
+git clone https://github.com/Open-Rights-Exchange/chain-js-plugin-algorand.git
+npm --prefix ./chain-js-plugin-algorand install
 git clone  --branch plugin-breakout https://github.com/Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground

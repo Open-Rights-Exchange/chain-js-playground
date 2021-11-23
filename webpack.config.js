@@ -44,7 +44,8 @@ module.exports = (env, argv) => {
     alias: {
        "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"),
        "@open-rights-exchange/chainjs-plugin-eos": path.resolve(__dirname, "../chain-js-plugin-eos/dist/src"),
-       "@open-rights-exchange/chainjs-plugin-eth": path.resolve(__dirname, "../chain-js-plugin-eth/dist/src")
+       "@open-rights-exchange/chainjs-plugin-eth": path.resolve(__dirname, "../chain-js-plugin-eth/dist/src"),
+       "@open-rights-exchange/chainjs-plugin-algorand": path.resolve(__dirname, "../chain-js-plugin-algorand/dist/src")
       },
     fallback: {
         "electron": false,

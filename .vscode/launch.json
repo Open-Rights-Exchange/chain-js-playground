@@ -13,6 +13,7 @@
                 "${workspaceRoot}/../chain-js/**/*.js",
                 "${workspaceRoot}/../chain-js-plugin-eos/**/*.js",
                 "${workspaceRoot}/../chain-js-plugin-ethereum/**/*.js",
+                "${workspaceRoot}/../chain-js-plugin-algorand/**/*.js",
             ],
             "runtimeArgs": ["--nolazy", "-r", "tsconfig-paths/register", "-r", "ts-node/register/transpile-only"],
             "args": ["src/index.ts"],
@@ -22,6 +23,7 @@
                 "${workspaceFolder}/../chain-js/**",
                 "${workspaceRoot}/../chain-js-plugin-eos/**",
                 "${workspaceRoot}/../chain-js-plugin-ethereum/**",
+                "${workspaceRoot}/../chain-js-plugin-algorand/**",
                 "!**/node_modules/**"
             ],
             "smartStep": true,

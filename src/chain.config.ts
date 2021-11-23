@@ -5,15 +5,16 @@ import { ChainEntityNameBrand } from '../../chain-js/src/models';
 -- To us the current chain-js design (without plugins), uncomment the below 
 -- Note that HelpersEos, HelpersEthereum, ModelsEthereum is loaded from chain-js - this needs to be loaded from the plugin when using the plugin model.
 */
-// import { Models, HelpersEos, HelpersEthereum, ModelsEthereum  } from '@open-rights-exchange/chainjs'
+//import { Models, HelpersEos, HelpersEthereum, ModelsEthereum, Crypto  } from '@open-rights-exchange/chainjs'
 
 /*
 -- Uncomment the below two lines to use the plugin model
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
-import { Models } from '@open-rights-exchange/chainjs'
+import { Models, CryptoHelpers, Helpers } from '@open-rights-exchange/chainjs'
 import { HelpersEos } from '@open-rights-exchange/chainjs-plugin-eos'
-import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chainjs-plugin-eth'
+import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chainjs-plugin-ethereum'
+import { HelpersAlgorand } from '@open-rights-exchange/chainjs-plugin-algorand'
 
 export interface IChainSettings {
     [chainId: string] : 
@@ -49,6 +50,28 @@ var settingObj : IChainSettings = {
             permission: HelpersEos.toEosEntityName('active'),
             privateKeys: [process.env.JUNGLE_KEY ?? ''],
             transferAmount: '0.0001',
+            precision: 4 // Check if this is used. 
+        }
+    },
+    "algorand" : 
+    {
+        "testnet" :
+        {
+            chainType: Models.ChainType.AlgorandV1,
+            endpoints:  [{
+                    url: 'https://testnet-algorand.api.purestake.io/ps2',
+                    options: { 
+                        indexerUrl: 'https://testnet-algorand.api.purestake.io/idx2', 
+                        headers: [{ 'x-api-key': process.env.ALGORAND_API_KEY }] 
+                    },
+            }],                
+            fromAccountName : Helpers.toChainEntityName("HUWP46SR64FBSQRM6DII2GBOFW65YLKVB4RTTEFL6SIV6L5MKXWCWONVA4"),
+            toAccountName: Helpers.toChainEntityName("LVUMGAGW5WIAUQI6W365MAD2OYZXGCJMRCH623OIZIWH7DXLL2CRJBAJZU"),
+            chainSettings: {},
+            symbol:  "microalgo",
+            permission: null,
+            privateKeys: [HelpersAlgorand.toAlgorandPrivateKey(process.env.ALGORAND_KEY ?? '')], //toAlgorandPrivateKey
+            transferAmount: '1',
             precision: 4 // Check if this is used. 
         }
     },

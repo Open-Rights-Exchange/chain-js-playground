@@ -2,8 +2,9 @@ import config from './chain.config'
 import { Models } from '@open-rights-exchange/chainjs'
 
 
-var configObj = config.eth.ropsten
+//var configObj = config.eth.ropsten
 //var configObj = config.eos.jungle
+var configObj = config.algorand.testnet
 
 var chainType = configObj.chainType;
 var endpoints : Models.ChainEndpoint[] = configObj.endpoints
@@ -30,8 +31,9 @@ var precision = configObj.precision
 */
  import { PluginChainFactory } from '@open-rights-exchange/chainjs'
  import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
- import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-eth'
- var chain = PluginChainFactory([EOSPlugin, EthereumPlugin], chainType,endpoints, chainSettings);
+ import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-ethereum'
+ import { Plugin as AlorandPlugin} from '@open-rights-exchange/chainjs-plugin-algorand'
+ var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType,endpoints, chainSettings);
 
 async function runTxn() {
 
@@ -51,6 +53,7 @@ async function runTxn() {
                permission: permission,
                precision: precision               
              });
+
              
         sendTokenTx.actions = [action];
         
@@ -58,9 +61,9 @@ async function runTxn() {
         await sendTokenTx.validate()
         await sendTokenTx.sign(privateKeys);
 
-        //var result :  Models.TransactionResult =  await sendTokenTx.send();
+        var result :  Models.TransactionResult =  await sendTokenTx.send();
 
-        //console.log('transactionId:', result.transactionId)
+        console.log('transactionId:', result.transactionId)
         console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
         console.log('actions:', JSON.stringify(sendTokenTx.actions))
         console.log('header:', sendTokenTx.header)
@@ -76,10 +79,6 @@ if(chain) {
     runTxn()
 }
     
-
-
-
-
 
 // (Typescript) cast generic chain to EOS chain object
 //const eosChain = (myChain as ChainEosV2) // EOSIO node version 2.x

@@ -10,7 +10,8 @@
     "paths": {
       "@open-rights-exchange/chainjs": ["../chain-js/src"],
       "@open-rights-exchange/chainjs-plugin-eos" : ["../chain-js-plugin-eos/src"],
-      "@open-rights-exchange/chainjs-plugin-eth" : ["../chain-js-plugin-ethereum/src"]
+      "@open-rights-exchange/chainjs-plugin-ethereum" : ["../chain-js-plugin-ethereum/src"],
+      "@open-rights-exchange/chainjs-plugin-algorand" : ["../chain-js-plugin-algorand/src"]
     },
     "allowSyntheticDefaultImports" : true,
     "downlevelIteration" : true,
@@ -22,6 +23,7 @@
   },"references": [
     {"path": "../chain-js"},
     {"path": "../chain-js-plugin-eos"},
-    {"path": "../chain-js-plugin-ethereum"}
+    {"path": "../chain-js-plugin-ethereum"},
+    {"path": "../chain-js-plugin-algorand"},
   ]
 }
