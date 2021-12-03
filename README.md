@@ -46,7 +46,7 @@ git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-ethere
 npm --prefix ./chain-js-plugin-ethereum install
 git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-algorand.git
 npm --prefix ./chain-js-plugin-algorand install
-git clone  --branch plugin-breakout git@github.com-codeoflight:Open-Rights-Exchange/chain-js-playground.git
+git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
 npm run debug
