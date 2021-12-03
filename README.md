@@ -49,7 +49,7 @@ npm --prefix ./chain-js-plugin-algorand install
 git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
-npm run debug
+npm run start
 ```
 
 ## Configuration

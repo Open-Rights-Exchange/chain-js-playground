@@ -1,11 +1,9 @@
 import config , {validateSettings, IChainSettings} from './chain.config'
 import { Models } from '@open-rights-exchange/chainjs'
-import {checkEnvVaraible} from './helpers'
-
 
 //let chainId = "eos", networkId = "jungle"
-let chainId = "eth", networkId = "ropsten"
-//let chainId = "algorand", networkId = "testnet"
+//let chainId = "eth", networkId = "ropsten"
+let chainId = "algorand", networkId = "testnet"
 
 var configObj = config[chainId][networkId]
 validateSettings(chainId, networkId, configObj);
