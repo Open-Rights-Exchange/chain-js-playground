@@ -1,11 +1,43 @@
-import { ChainFactory,  Models, ChainType, HelpersEos } from '@open-rights-exchange/chainjs'
-import secret from './secrets.config'
+import config , {validateSettings, IChainSettings} from './chain.config'
+import { Models } from '@open-rights-exchange/chainjs'
+import {checkEnvVaraible} from './helpers'
 
-var jungleEndpoints : Models.ChainEndpoint[] = [{url : "https://jungle3.cryptolions.io:443"}];
-var chainSettings: any = {};
 
-/** Using chain-specifc features - ex. eosjs */
-const chain = new ChainFactory().create(ChainType.EosV2, jungleEndpoints, chainSettings)
+//let chainId = "eos", networkId = "jungle"
+let chainId = "eth", networkId = "ropsten"
+//let chainId = "algorand", networkId = "testnet"
+
+var configObj = config[chainId][networkId]
+validateSettings(chainId, networkId, configObj);
+
+var chainType = configObj.chainType;
+var endpoints : Models.ChainEndpoint[] = configObj.endpoints
+var chainSettings: any = configObj.chainSettings
+var fromAccountName = configObj.fromAccountName
+var toAccountName = configObj.toAccountName
+var symbol = configObj.symbol
+var permission = configObj.permission
+var privateKeys = configObj.privateKeys
+var transferAmount = configObj.transferAmount
+var precision = configObj.precision
+
+/*
+-- To us the current chain-js design (without plugins), uncomment the below 
+*/
+// import { ChainFactory } from '@open-rights-exchange/chainjs'
+// var chain  = new ChainFactory().create(chainType,endpoints, chainSettings);
+
+
+/*
+-- The new plugin model implements a PluginChainFactory which should be used insted of ChainFactory
+-- Uncomment the below two lines to use the plugin model
+-- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
+*/
+ import { PluginChainFactory } from '@open-rights-exchange/chainjs'
+ import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
+ import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-ethereum'
+ import { Plugin as AlorandPlugin} from '@open-rights-exchange/chainjs-plugin-algorand'
+ var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType,endpoints, chainSettings);
 
 async function runTxn() {
 
@@ -15,45 +47,38 @@ async function runTxn() {
         await chain.connect()
 
         var sendTokenTx = await chain.new.Transaction()
-        var action = await chain.composeAction(Models.ChainActionType.TokenTransfer,
+        var action = await chain.composeAction(Models.ChainActionType.ValueTransfer,
             {            
-               fromAccountName : 'codeoflight1',
-               toAccountName: 'codeoflight2',
-               amount: '0.0001',
-               symbol: 'EOS',
+               fromAccountName : fromAccountName,
+               toAccountName: toAccountName,
+               amount: transferAmount,
+               symbol: symbol,
                memo: 'Test',
-               permission: HelpersEos.toEosEntityName('active')
+               permission: permission,
+               precision: precision               
              });
-           sendTokenTx.actions = [action];
-           
-           await sendTokenTx.prepareToBeSigned()
-           await sendTokenTx.validate()
-           await sendTokenTx.sign([secret.JungleKey]);
 
-           //var result :  Models.TransactionResult =  await sendTokenTx.send();
+             
+        sendTokenTx.actions = [action];
+        
+        await sendTokenTx.prepareToBeSigned()
+        await sendTokenTx.validate()
+        await sendTokenTx.sign(privateKeys);
 
-           //console.log('transactionId:', result.transactionId)
-           console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
-           console.log('actions:', JSON.stringify(sendTokenTx.actions))
-           console.log('header:', sendTokenTx.header)
-           console.log('signatures:', sendTokenTx.signatures)
+        var result :  Models.TransactionResult =  await sendTokenTx.send();
+
+        console.log('transactionId:', result.transactionId)
+        console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
+        console.log('actions:', JSON.stringify(sendTokenTx.actions))
+        console.log('header:', sendTokenTx.header)
+        console.log('signatures:', sendTokenTx.signatures)
 
     } catch(error) {
-
         console.log("There was an error: " + error);
-
     }
 
 }
 
-runTxn()
-
-
-
-
-
-// (Typescript) cast generic chain to EOS chain object
-//const eosChain = (myChain as ChainEosV2) // EOSIO node version 2.x
-//eosChain.eosjs.api.transact();
- // xhr2-cookies requires polyfills
- 
+if(chain) {
+    runTxn()
+}

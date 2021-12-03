@@ -11,8 +11,11 @@ module.exports = (env, argv) => {
   var local_chainjs_alias = function() {
     if(env.use_local_chainjs_code_NOT_npm == 'true') {
       return {
-        "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"), 
-      }
+        "@open-rights-exchange/chainjs": path.resolve(__dirname, "../chain-js/dist/src"),
+        "@open-rights-exchange/chainjs-plugin-eos": path.resolve(__dirname, "../chain-js-plugin-eos/dist/src"),
+        "@open-rights-exchange/chainjs-plugin-ethereum": path.resolve(__dirname, "../chain-js-plugin-ethereum/dist/src"),
+        "@open-rights-exchange/chainjs-plugin-algorand": path.resolve(__dirname, "../chain-js-plugin-algorand/dist/src")
+       }
     } else {
       return {}
     }

@@ -38,13 +38,40 @@ The bellow instructions should create a structure that looks as above
 ```
 mkdir chain-js-root
 cd chain-js-root
-git clone https://github.com/Open-Rights-Exchange/chain-js.git
+git clone --branch plugin-breakout git@github.com-codeoflight:Open-Rights-Exchange/chain-js.git
 npm --prefix ./chain-js install
-git clone https://github.com/Open-Rights-Exchange/chain-js-playground.git
+git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-eos.git
+npm --prefix ./chain-js-plugin-eos install
+git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-ethereum.git
+npm --prefix ./chain-js-plugin-ethereum install
+git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-algorand.git
+npm --prefix ./chain-js-plugin-algorand install
+git clone  --branch plugin-breakout git@github.com-codeoflight:Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
 npm run debug
 ```
+
+## Configuration
+
+The following Environment variables are used to provide sensitive information
+```
+export eos_jungle_fromAccountName=XXX
+export eos_jungle_toAccountName=XXX
+export eos_jungle_privateKey=XXX
+
+export algorand_testnet_fromAccountName=XXX
+export algorand_testnet_toAccountName=XXX
+export algorand_testnet_privateKey=XXX
+export algorand_testnet_apiKey=https://developer.purestake.io/
+
+export eth_ropsten_fromAccountName=XXX
+export eth_ropsten_toAccountName=XXX
+export eth_ropsten_privateKey=XXX
+```
+
+All other config options can be found in "chain.config.ts" 
+
 
 ## Notes
 
