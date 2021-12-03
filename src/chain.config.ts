@@ -1,5 +1,6 @@
 import { ChainEntityNameBrand } from '../../chain-js/src/models';
-
+import {checkEnvVaraible} from './helpers'
+import { Errors } from '@open-rights-exchange/chainjs'
 
 /*
 -- To us the current chain-js design (without plugins), uncomment the below 
@@ -17,38 +18,73 @@ import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chainjs-p
 import { HelpersAlgorand } from '@open-rights-exchange/chainjs-plugin-algorand'
 
 export interface IChainSettings {
+    chainType : Models.ChainType,
+    endpoints : [Models.ChainEndpoint]
+    chainSettings : ModelsEthereum.EthereumChainForkType|any,
+    fromAccountName : string,
+    toAccountName : string,
+    symbol: string,
+    permission: ChainEntityNameBrand|null,
+    privateKeys: [string],
+    transferAmount: string,
+    precision: number
+}
+
+export interface IAllChainSettings {
     [chainId: string] : 
         {
-            [subId: string] : 
-            {
-                chainType : Models.ChainType,
-                endpoints : [Models.ChainEndpoint]
-                chainSettings : ModelsEthereum.EthereumChainForkType|any,
-                fromAccountName : string,
-                toAccountName : string,
-                symbol: string,
-                permission: ChainEntityNameBrand|null,
-                privateKeys: [string],
-                transferAmount: string,
-                precision: number
-        }
+            [subId: string] : IChainSettings
     }
 }
 
-var settingObj : IChainSettings = {
+export function validateSettings(chainId: string, networkId: string, settings: IChainSettings) : boolean {
+    let settingPath = chainId+"."+networkId
+    var errorCount = 0;
+
+    switch(settingPath) { 
+        case "eos.jungle": {             
+            errorCount += checkEnvVaraible("eos_jungle_fromAccountName");
+            errorCount += checkEnvVaraible("eos_jungle_toAccountName");
+            errorCount += checkEnvVaraible("eos_jungle_privateKey");
+            break; 
+        } 
+        case "algorand.testnet": {             
+            errorCount += checkEnvVaraible("algorand_testnet_fromAccountName");
+            errorCount += checkEnvVaraible("algorand_testnet_toAccountName");
+            errorCount += checkEnvVaraible("algorand_testnet_privateKey");
+            errorCount += checkEnvVaraible("algorand_testnet_apiKey");
+            break; 
+        } 
+        case "eth.ropsten": {             
+            errorCount += checkEnvVaraible("eth_ropsten_fromAccountName");
+            errorCount += checkEnvVaraible("eth_ropsten_toAccountName");
+            errorCount += checkEnvVaraible("eth_ropsten_privateKey");
+            break; 
+        }         
+        default: { 
+           console.warn("No setting validation was done for " + settingPath)
+           return true;
+           break; 
+        } 
+     } 
+     if(errorCount > 0)
+        Errors.throwNewError("Please set the correct environment variables")
+}
+
+
+var settingObj : IAllChainSettings = {
     "eos" : 
     {
         "jungle" :
         {
             chainType: Models.ChainType.EosV2,
-            endpoints:  [{url : "https://jungle3.cryptolions.io:443"}],
-            //endpoints:  [{url : "https://jungle.eosn.io:443"}],            
-            fromAccountName : "codeoflight1",
-            toAccountName: "codeoflight2",
+            endpoints:  [{url : "https://jungle3.cryptolions.io:443"}],          
+            fromAccountName : process.env.eos_jungle_fromAccountName,
+            toAccountName: process.env.eos_jungle_toAccountName,
             chainSettings: {},
             symbol:  "EOS",
             permission: HelpersEos.toEosEntityName('active'),
-            privateKeys: [process.env.JUNGLE_KEY ?? ''],
+            privateKeys: [process.env.eos_jungle_privateKey],
             transferAmount: '0.0001',
             precision: 4 // Check if this is used. 
         }

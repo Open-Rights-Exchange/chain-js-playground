@@ -56,10 +56,18 @@ npm run debug
 
 The following Environment variables are used to provide sensitive information
 ```
-export JUNGLE_KEY=XXXX #EOS Jungle3 Private Key 
-export ROPSTEN_KEY=XXXX #Ethereum Ropsten Private Key
-export ALGORAND_KEY=XXXX #Algorand Private Key in Hex Format - use this tool to convert your seed phrase to the format required https://github.com/Open-Rights-Exchange/algorand-seed-to-hex
-export ALGORAND_API_KEY=XXXXX  #This is the API Key from https://developer.purestake.io/
+export eos_jungle_fromAccountName=XXX
+export eos_jungle_toAccountName=XXX
+export eos_jungle_privateKey=XXX
+
+export algorand_testnet_fromAccountName=XXX
+export algorand_testnet_toAccountName=XXX
+export algorand_testnet_privateKey=XXX
+export algorand_testnet_apiKey=https://developer.purestake.io/
+
+export eth_ropsten_fromAccountName=XXX
+export eth_ropsten_toAccountName=XXX
+export eth_ropsten_privateKey=XXX
 ```
 
 All other config options can be found in "chain.config.ts" 

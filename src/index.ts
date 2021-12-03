@@ -1,10 +1,14 @@
-import config from './chain.config'
+import config , {validateSettings, IChainSettings} from './chain.config'
 import { Models } from '@open-rights-exchange/chainjs'
+import {checkEnvVaraible} from './helpers'
 
 
-//var configObj = config.eth.ropsten
-//var configObj = config.eos.jungle
-var configObj = config.algorand.testnet
+//let chainId = "eos", networkId = "jungle"
+let chainId = "eth", networkId = "ropsten"
+//let chainId = "algorand", networkId = "testnet"
+
+var configObj = config[chainId][networkId]
+validateSettings(chainId, networkId, configObj);
 
 var chainType = configObj.chainType;
 var endpoints : Models.ChainEndpoint[] = configObj.endpoints
