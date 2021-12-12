@@ -37,7 +37,7 @@ export interface IAllChainSettings {
     }
 }
 
-export function validateSettings(chainId: string, networkId: string, settings: IChainSettings) : boolean {
+export function validateSettings(chainId: string, networkId: string) : boolean {
     let settingPath = chainId+"."+networkId
     var errorCount = 0;
 

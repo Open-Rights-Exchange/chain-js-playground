@@ -5,8 +5,8 @@ import { Models } from '@open-rights-exchange/chainjs'
 //let chainId = "eth", networkId = "ropsten"
 let chainId = "algorand", networkId = "testnet"
 
+validateSettings(chainId, networkId);
 var configObj = config[chainId][networkId]
-validateSettings(chainId, networkId, configObj);
 
 var chainType = configObj.chainType;
 var endpoints : Models.ChainEndpoint[] = configObj.endpoints
