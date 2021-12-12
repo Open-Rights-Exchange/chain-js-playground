@@ -1,11 +1,14 @@
-import config , {validateSettings, IChainSettings} from './chain.config'
+import {validateSettings} from './chain.config'
 import { Models } from '@open-rights-exchange/chainjs'
 
 //let chainId = "eos", networkId = "jungle"
 //let chainId = "eth", networkId = "ropsten"
 let chainId = "algorand", networkId = "testnet"
 
+//Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
 validateSettings(chainId, networkId);
+
+import config from './chain.config'
 var configObj = config[chainId][networkId]
 
 var chainType = configObj.chainType;
