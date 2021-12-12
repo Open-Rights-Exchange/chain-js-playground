@@ -1,4 +1,4 @@
-import {validateSettings} from './chain.config'
+import {validateSettings} from './helpers'
 import { Models } from '@open-rights-exchange/chainjs'
 
 //let chainId = "eos", networkId = "jungle"
