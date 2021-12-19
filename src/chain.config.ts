@@ -52,6 +52,19 @@ var settingObj : IAllChainSettings = {
             privateKeys: [process.env.eos_jungle_privateKey],
             transferAmount: '0.0001',
             precision: 4 // Check if this is used. 
+        },
+        "kylin" :
+        {
+            chainType: Models.ChainType.EosV2,
+            endpoints:  [{url : "https://kylin.eosn.io:443"}],          
+            fromAccountName : process.env.eos_kylin_fromAccountName,
+            toAccountName: process.env.eos_kylin_toAccountName,
+            chainSettings: {},
+            symbol:  "EOS",
+            permission: HelpersEos.toEosEntityName('active'),
+            privateKeys: [process.env.eos_kylin_privateKey],
+            transferAmount: '0.0001',
+            precision: 4
         }
     },
     "algorand" : 
