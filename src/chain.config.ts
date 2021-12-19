@@ -1,5 +1,5 @@
 import { ChainEntityNameBrand } from '../../chain-js/src/models';
-
+require('dotenv').config()
 
 
 /*
@@ -37,8 +37,6 @@ export interface IAllChainSettings {
     }
 }
 
-
-
 var settingObj : IAllChainSettings = {
     "eos" : 
     {
@@ -65,15 +63,15 @@ var settingObj : IAllChainSettings = {
                     url: 'https://testnet-algorand.api.purestake.io/ps2',
                     options: { 
                         indexerUrl: 'https://testnet-algorand.api.purestake.io/idx2', 
-                        headers: [{ 'x-api-key': process.env.ALGORAND_API_KEY }] 
+                        headers: [{ 'x-api-key': process.env.algorand_testnet_apiKey }] 
                     },
             }],                
-            fromAccountName : Helpers.toChainEntityName("HUWP46SR64FBSQRM6DII2GBOFW65YLKVB4RTTEFL6SIV6L5MKXWCWONVA4"),
-            toAccountName: Helpers.toChainEntityName("LVUMGAGW5WIAUQI6W365MAD2OYZXGCJMRCH623OIZIWH7DXLL2CRJBAJZU"),
+            fromAccountName : process.env.algorand_testnet_fromAccountName,
+            toAccountName: process.env.algorand_testnet_toAccountName,
             chainSettings: {},
             symbol:  "microalgo",
             permission: null,
-            privateKeys: [HelpersAlgorand.toAlgorandPrivateKey(process.env.ALGORAND_KEY ?? '')], //toAlgorandPrivateKey
+            privateKeys: [HelpersAlgorand.toAlgorandPrivateKey(process.env.algorand_testnet_privateKey ?? '')], //toAlgorandPrivateKey
             transferAmount: '1',
             precision: 4 // Check if this is used. 
         }
@@ -92,8 +90,8 @@ var settingObj : IAllChainSettings = {
                     // }
                 }
             ],
-            fromAccountName : HelpersEthereum.toEthereumAddress("0x60d5DA4FC785Dd1dA9c2dAF084B2D5ba478c8f8b"),
-            toAccountName: HelpersEthereum.toEthereumAddress("0x9F0E93C9A61036Ce864cE43654440d7bA2a7d8Ca"),
+            fromAccountName : process.env.eth_ropsten_fromAccountName,
+            toAccountName: process.env.eth_ropsten_toAccountName,
             chainSettings: {
                 chainForkType : {
                     chainName: "ropsten",
@@ -106,7 +104,7 @@ var settingObj : IAllChainSettings = {
             },
             symbol: "gwei",
             permission: null,
-            privateKeys: [process.env.ROPSTEN_KEY ?? ''],
+            privateKeys: [process.env.eth_ropsten_privateKey ?? ''],
             transferAmount: '10001',
             precision: 18
         }
