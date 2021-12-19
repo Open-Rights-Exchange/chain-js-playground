@@ -23,22 +23,13 @@ var transferAmount = configObj.transferAmount
 var precision = configObj.precision
 
 /*
--- To us the current chain-js design (without plugins), uncomment the below 
-*/
-// import { ChainFactory } from '@open-rights-exchange/chainjs'
-// var chain  = new ChainFactory().create(chainType,endpoints, chainSettings);
-
-
-/*
--- The new plugin model implements a PluginChainFactory which should be used insted of ChainFactory
--- Uncomment the below two lines to use the plugin model
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
 import { PluginChainFactory } from '@open-rights-exchange/chainjs'
 import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
 import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-ethereum'
 import { Plugin as AlorandPlugin} from '@open-rights-exchange/chainjs-plugin-algorand'
-var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType,endpoints, chainSettings);
+var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType, endpoints, chainSettings);
 
 async function runTxn() {
 
