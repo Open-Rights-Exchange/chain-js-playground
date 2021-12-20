@@ -1,8 +1,8 @@
 import {validateSettings} from './helpers'
 import { Models } from '@open-rights-exchange/chainjs'
 
-//let chainId = "eos", networkId = "jungle"
-//let chainId = "eth", networkId = "ropsten"
+// let chainId = "eos", networkId = "kylin"
+// let chainId = "eth", networkId = "ropsten"
 let chainId = "algorand", networkId = "testnet"
 
 //Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
@@ -23,43 +23,32 @@ var transferAmount = configObj.transferAmount
 var precision = configObj.precision
 
 /*
--- To us the current chain-js design (without plugins), uncomment the below 
-*/
-// import { ChainFactory } from '@open-rights-exchange/chainjs'
-// var chain  = new ChainFactory().create(chainType,endpoints, chainSettings);
-
-
-/*
--- The new plugin model implements a PluginChainFactory which should be used insted of ChainFactory
--- Uncomment the below two lines to use the plugin model
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
- import { PluginChainFactory } from '@open-rights-exchange/chainjs'
- import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
- import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-ethereum'
- import { Plugin as AlorandPlugin} from '@open-rights-exchange/chainjs-plugin-algorand'
- var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType,endpoints, chainSettings);
+import { PluginChainFactory } from '@open-rights-exchange/chainjs'
+import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
+import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-ethereum'
+import { Plugin as AlorandPlugin} from '@open-rights-exchange/chainjs-plugin-algorand'
+var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType, endpoints, chainSettings);
 
 async function runTxn() {
 
     try {
-
         console.log(chain.isConnected);
         await chain.connect()
 
         var sendTokenTx = await chain.new.Transaction()
         var action = await chain.composeAction(Models.ChainActionType.ValueTransfer,
-            {            
-               fromAccountName : fromAccountName,
-               toAccountName: toAccountName,
-               amount: transferAmount,
-               symbol: symbol,
-               memo: 'Test',
-               permission: permission,
-               precision: precision               
-             });
+        {
+            fromAccountName,
+            toAccountName,
+            amount: transferAmount,
+            symbol,
+            memo: 'Test',
+            permission,
+            precision
+        });
 
-             
         sendTokenTx.actions = [action];
         
         await sendTokenTx.prepareToBeSigned()
@@ -73,13 +62,15 @@ async function runTxn() {
         console.log('actions:', JSON.stringify(sendTokenTx.actions))
         console.log('header:', sendTokenTx.header)
         console.log('signatures:', sendTokenTx.signatures)
-
     } catch(error) {
         console.log("There was an error: " + error);
     }
 
 }
 
-if(chain) {
-    runTxn()
-}
+;(async () => {
+    if(chain) {
+        await runTxn()
+        process.exit()
+    }
+})()

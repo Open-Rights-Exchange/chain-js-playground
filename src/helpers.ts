@@ -1,5 +1,6 @@
 import {IAllChainSettings} from './chain.config'
 import { Errors } from '@open-rights-exchange/chainjs'
+require('dotenv').config()
 
 export function checkEnvVaraible(variableName: string) : number {
     let envVar = process.env[variableName] ?? '' 
@@ -23,6 +24,12 @@ export function validateSettings(chainId: string, networkId: string) : boolean {
             errorCount += checkEnvVaraible("eos_jungle_privateKey");
             break; 
         } 
+        case "eos.kylin": {             
+            errorCount += checkEnvVaraible("eos_kylin_fromAccountName");
+            errorCount += checkEnvVaraible("eos_kylin_toAccountName");
+            errorCount += checkEnvVaraible("eos_kylin_privateKey");
+            break; 
+        } 
         case "algorand.testnet": {             
             errorCount += checkEnvVaraible("algorand_testnet_fromAccountName");
             errorCount += checkEnvVaraible("algorand_testnet_toAccountName");
@@ -37,11 +44,11 @@ export function validateSettings(chainId: string, networkId: string) : boolean {
             break; 
         }         
         default: { 
-           console.warn("No setting validation was done for " + settingPath)
-           return true;
-           break; 
+            console.warn("No setting validation was done for " + settingPath)
+            return true;
+            break;
         } 
-     } 
-     if(errorCount > 0)
+    }
+    if(errorCount > 0)
         Errors.throwNewError("Please set the correct environment variables")
 }
