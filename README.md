@@ -38,15 +38,15 @@ The bellow instructions should create a structure that looks as above
 ```
 mkdir chain-js-root
 cd chain-js-root
-git clone --branch plugin-breakout git@github.com-codeoflight:Open-Rights-Exchange/chain-js.git
+git clone --branch plugin-breakout git@github.com:Open-Rights-Exchange/chain-js.git
 npm --prefix ./chain-js install
-git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-eos.git
+git clone git@github.com:Open-Rights-Exchange/chain-js-plugin-eos.git
 npm --prefix ./chain-js-plugin-eos install
-git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-ethereum.git
+git clone git@github.com:Open-Rights-Exchange/chain-js-plugin-ethereum.git
 npm --prefix ./chain-js-plugin-ethereum install
-git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-plugin-algorand.git
+git clone git@github.com-:Open-Rights-Exchange/chain-js-plugin-algorand.git
 npm --prefix ./chain-js-plugin-algorand install
-git clone git@github.com-codeoflight:Open-Rights-Exchange/chain-js-playground.git
+git clone git@github.com-:Open-Rights-Exchange/chain-js-playground.git
 npm --prefix ./chain-js-playground install
 cd chain-js-playground
 npm run start
