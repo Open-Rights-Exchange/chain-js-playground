@@ -1,9 +1,9 @@
 import {validateSettings} from './helpers'
 import { Models } from '@open-rights-exchange/chainjs'
 
-// let chainId = "eos", networkId = "kylin"
-// let chainId = "eth", networkId = "ropsten"
 let chainId = "algorand", networkId = "testnet"
+// let chainId = "eos", networkId = "jungle"
+// let chainId = "eth", networkId = "ropsten"
 
 //Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
 validateSettings(chainId, networkId);
