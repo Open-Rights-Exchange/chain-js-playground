@@ -1,5 +1,5 @@
 import {IAllChainSettings} from './chain.config'
-import { Errors } from '@open-rights-exchange/chainjs'
+import { Errors } from '@open-rights-exchange/chain-js'
 require('dotenv').config()
 
 export function checkEnvVaraible(variableName: string) : number {

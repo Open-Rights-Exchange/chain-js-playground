@@ -1,5 +1,5 @@
 import {validateSettings} from './helpers'
-import { Models } from '@open-rights-exchange/chainjs'
+import { Models } from '@open-rights-exchange/chain-js'
 
 let chainId = "algorand", networkId = "testnet"
 // let chainId = "eos", networkId = "jungle"
@@ -25,10 +25,10 @@ var precision = configObj.precision
 /*
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
-import { PluginChainFactory } from '@open-rights-exchange/chainjs'
-import { Plugin as EOSPlugin} from '@open-rights-exchange/chainjs-plugin-eos'
-import { Plugin as EthereumPlugin} from '@open-rights-exchange/chainjs-plugin-ethereum'
-import { Plugin as AlorandPlugin} from '@open-rights-exchange/chainjs-plugin-algorand'
+import { PluginChainFactory } from '@open-rights-exchange/chain-js'
+import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
+import { Plugin as EthereumPlugin} from '@open-rights-exchange/chain-js-plugin-ethereum'
+import { Plugin as AlorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
 var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType, endpoints, chainSettings);
 
 async function runTxn() {

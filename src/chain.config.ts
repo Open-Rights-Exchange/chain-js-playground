@@ -12,10 +12,10 @@ require('dotenv').config()
 -- Uncomment the below two lines to use the plugin model
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
-import { Models, CryptoHelpers, Helpers } from '@open-rights-exchange/chainjs'
-import { HelpersEos } from '@open-rights-exchange/chainjs-plugin-eos'
-import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chainjs-plugin-ethereum'
-import { HelpersAlgorand } from '@open-rights-exchange/chainjs-plugin-algorand'
+import { Models, CryptoHelpers, Helpers } from '@open-rights-exchange/chain-js'
+import { HelpersEos } from '@open-rights-exchange/chain-js-plugin-eos'
+import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chain-js-plugin-ethereum'
+import { HelpersAlgorand } from '@open-rights-exchange/chain-js-plugin-algorand'
 
 export interface IChainSettings {
     chainType : Models.ChainType,

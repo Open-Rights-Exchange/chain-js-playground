@@ -8,10 +8,10 @@
     "allowJs": true,
     "moduleResolution": "node",
     "paths": {
-      "@open-rights-exchange/chainjs": ["../chain-js/src"],
-      "@open-rights-exchange/chainjs-plugin-eos" : ["../chain-js-plugin-eos/src"],
-      "@open-rights-exchange/chainjs-plugin-ethereum" : ["../chain-js-plugin-ethereum/src"],
-      "@open-rights-exchange/chainjs-plugin-algorand" : ["../chain-js-plugin-algorand/src"]
+      "@open-rights-exchange/chain-js": ["../chain-js/src"],
+      "@open-rights-exchange/chain-js-plugin-eos" : ["../chain-js-plugin-eos/src"],
+      "@open-rights-exchange/chain-js-plugin-ethereum" : ["../chain-js-plugin-ethereum/src"],
+      "@open-rights-exchange/chain-js-plugin-algorand" : ["../chain-js-plugin-algorand/src"]
     },
     "allowSyntheticDefaultImports" : true,
     "downlevelIteration" : true,
