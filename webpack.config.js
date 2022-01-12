@@ -21,6 +21,14 @@ module.exports = (env, argv) => {
     }
   }();
 
+  var local_chainjs_alias_projectReferences = function() {
+    if(env.use_local_chainjs_code_NOT_npm == 'true') {
+      return true
+    } else {
+      return false
+    }
+  }();
+
   return {entry: './src/index.ts',
   module: {
     rules: [
@@ -28,7 +36,7 @@ module.exports = (env, argv) => {
         test: /\.tsx?$/,
         use: [{
             loader:'ts-loader',
-            options: {projectReferences: true}
+            options: {projectReferences: local_chainjs_alias_projectReferences}
           }],
         exclude: [
           /node_modules/

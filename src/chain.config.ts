@@ -1,4 +1,3 @@
-import { ChainEntityNameBrand } from '../../chain-js/src/models';
 require('dotenv').config()
 
 
@@ -24,7 +23,7 @@ export interface IChainSettings {
     fromAccountName : string,
     toAccountName : string,
     symbol: string,
-    permission: ChainEntityNameBrand|null,
+    permission: Models.ChainEntityNameBrand|null,
     privateKeys: [string],
     transferAmount: string,
     precision: number
