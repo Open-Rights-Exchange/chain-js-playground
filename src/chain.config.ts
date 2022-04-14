@@ -20,11 +20,13 @@ export interface IChainSettings {
     chainType : Models.ChainType,
     endpoints : [Models.ChainEndpoint]
     chainSettings : ModelsEthereum.EthereumChainForkType|any,
+    fromAccountName_MSIG : string,
     fromAccountName : string,
     toAccountName : string,
     symbol: string,
     permission: Models.ChainEntityNameBrand|null,
-    privateKeys: [string],
+    privateKey_singleSign: string,
+    privateKeys_MSIG: string[],
     transferAmount: string,
     precision: number
 }
@@ -42,26 +44,33 @@ var settingObj : IAllChainSettings = {
         "jungle" :
         {
             chainType: Models.ChainType.EosV2,
-            endpoints:  [{url : "https://jungle3.cryptolions.io:443"}],          
+            endpoints:  [{url : "https://jungle3.cryptolions.io:443"}],     
+            fromAccountName_MSIG : process.env.eos_jungle_fromAccountName_MSIG,    
             fromAccountName : process.env.eos_jungle_fromAccountName,
             toAccountName: process.env.eos_jungle_toAccountName,
             chainSettings: {},
             symbol:  "EOS",
             permission: HelpersEos.toEosEntityName('active'),
-            privateKeys: [process.env.eos_jungle_privateKey],
+            privateKey_singleSign: process.env.eos_jungle_privateKey,
+            privateKeys_MSIG: [
+                process.env.eos_jungle_msig_1_privateKey,
+                process.env.eos_jungle_msig_2_privateKey
+            ],
             transferAmount: '0.0001',
             precision: 4 // Check if this is used. 
         },
         "kylin" :
         {
             chainType: Models.ChainType.EosV2,
-            endpoints:  [{url : "https://kylin.eosn.io:443"}],          
+            endpoints:  [{url : "https://kylin.eosn.io:443"}],
+            fromAccountName_MSIG : process.env.eos_kylin_fromAccountName_MSIG,
             fromAccountName : process.env.eos_kylin_fromAccountName,
             toAccountName: process.env.eos_kylin_toAccountName,
             chainSettings: {},
             symbol:  "EOS",
             permission: HelpersEos.toEosEntityName('active'),
-            privateKeys: [process.env.eos_kylin_privateKey],
+            privateKey_singleSign: process.env.eos_kylin_privateKey,
+            privateKeys_MSIG: [process.env.eos_kylin_msig_1_privateKey, process.env.eos_kylin_msig_2_privateKey],
             transferAmount: '0.0001',
             precision: 4
         }
@@ -77,13 +86,17 @@ var settingObj : IAllChainSettings = {
                         indexerUrl: 'https://testnet-algorand.api.purestake.io/idx2', 
                         headers: [{ 'x-api-key': process.env.algorand_testnet_apiKey }] 
                     },
-            }],                
+            }],        
+            fromAccountName_MSIG : process.env.algorand_testnet_fromAccountName_MSIG,        
             fromAccountName : process.env.algorand_testnet_fromAccountName,
             toAccountName: process.env.algorand_testnet_toAccountName,
             chainSettings: {},
             symbol:  "microalgo",
             permission: null,
-            privateKeys: [HelpersAlgorand.toAlgorandPrivateKey(process.env.algorand_testnet_privateKey ?? '')], //toAlgorandPrivateKey
+            privateKey_singleSign: HelpersAlgorand.toAlgorandPrivateKey(process.env.algorand_testnet_privateKey ?? ''), //toAlgorandPrivateKey
+            privateKeys_MSIG: [
+                HelpersAlgorand.toAlgorandPrivateKey(process.env.algorand_testnet_privateKey ?? '')
+            ],
             transferAmount: '1',
             precision: 4 // Check if this is used. 
         }
@@ -102,6 +115,7 @@ var settingObj : IAllChainSettings = {
                     // }
                 }
             ],
+            fromAccountName_MSIG : process.env.eth_ropsten_fromAccountName_MSIG,
             fromAccountName : process.env.eth_ropsten_fromAccountName,
             toAccountName: process.env.eth_ropsten_toAccountName,
             chainSettings: {
@@ -116,7 +130,8 @@ var settingObj : IAllChainSettings = {
             },
             symbol: "gwei",
             permission: null,
-            privateKeys: [process.env.eth_ropsten_privateKey ?? ''],
+            privateKey_singleSign : process.env.eth_ropsten_privateKey ?? '',
+            privateKeys_MSIG: [process.env.eth_ropsten_msig_1_privateKey],
             transferAmount: '10001',
             precision: 18
         }
