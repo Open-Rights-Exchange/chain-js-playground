@@ -22,7 +22,7 @@
     "esModuleInterop": true
   },"references": [
     {"path": "../chain-js"},
-    {"path": "../chain-js-plugin-eos"},
+    {"path": "../chain-js-plugin-eos/tsconfig-mjs.json"},
     {"path": "../chain-js-plugin-ethereum"},
     {"path": "../chain-js-plugin-algorand"},
   ]
