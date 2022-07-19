@@ -135,6 +135,37 @@ var settingObj : IAllChainSettings = {
             transferAmount: '10001',
             precision: 18
         }
+    },
+    "matic" : 
+    {
+        "polygon_mumbai" :
+        {
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://polygon-mumbai.g.alchemy.com/v2/AIIX0TtJA0j2FDoo5FzRc_e5766GxIPz", 
+                }
+            ],
+            fromAccountName_MSIG : process.env.matic_polygon_mumbai_fromAccountName_MSIG,
+            fromAccountName : process.env.matic_polygon_mumbai_fromAccountName,
+            toAccountName: process.env.matic_polygon_mumbai_toAccountName,
+            chainSettings: {
+                // "chainId": "80001",    
+                chainForkType : {
+                    chainName: "polygon-mumbai",
+                },            
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                }
+            },
+            symbol: "gwei",
+            permission: null,
+            privateKey_singleSign : process.env.matic_polygon_mumbai_privateKey ?? '',
+            privateKeys_MSIG: [process.env.matic_polygon_mumbai_msig_1_privateKey],
+            transferAmount: '1',
+            precision: 18
+        }
     }
     
 

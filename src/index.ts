@@ -1,11 +1,12 @@
-import {validateSettings} from './helpers'
+import { validateSettings } from './helpers'
 import { Models } from '@open-rights-exchange/chain-js'
 
 
 // let chainId = "algorand", networkId = "testnet", doMSIG = false
 // let chainId = "eos", networkId = "jungle", doMSIG = false
-let chainId = "eos", networkId = "kylin", doMSIG = false
+// let chainId = "eos", networkId = "kylin", doMSIG = false
 // let chainId = "eth", networkId = "ropsten", doMSIG = false
+let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false
 
 //Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
 validateSettings(chainId, networkId, doMSIG);
@@ -35,41 +36,60 @@ if(doMSIG) {
     fromAccountName = fromAccountName_MSIG
 }
 
-
-console.log("sign with the following keys: " + signing_keys)
+// console.log("sign with the following keys: " + signing_keys)
 
 /*
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
 import { PluginChainFactory } from '@open-rights-exchange/chain-js'
 import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
-import { Plugin as EthereumPlugin} from '@open-rights-exchange/chain-js-plugin-ethereum'
+import { Plugin as EthereumPlugin, ModelsEthereum} from '@open-rights-exchange/chain-js-plugin-ethereum'
 import { Plugin as AlorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
 var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType, endpoints, chainSettings);
 
 async function runTxn() {
 
     try {
-        console.log(chain.isConnected);
         await chain.connect()
 
-        var sendTokenTx = await chain.new.Transaction()
-        var action = await chain.composeAction(Models.ChainActionType.ValueTransfer,
-        {
+        var txnOptions = {
+                // gasLimit: "0x62D4", //25300 (25200 is default)
+                // gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)
+            };
+        var sendTokenTx = await chain.new.Transaction(txnOptions);
+
+        var genericValueTransfer = {
             fromAccountName,
             toAccountName,
             amount: transferAmount,
             symbol,
             memo: 'Test',
             permission,
-            precision
-        });
+            precision,
+            // gasLimit, gasPrice and nonce will only have an impact when running an ETH type transaction
+            // gasLimit: "0x62D4", //25300 (25200 is default)
+            // gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)
+            // nonce: "0x1"
+        }
+
+        var action = await chain.composeAction(Models.ChainActionType.ValueTransfer, genericValueTransfer);
+
+        //This should match our input
+        var decomposed_action = await chain.decomposeAction(action)
+        console.log("=========decomposed_action==========")
+        console.log(decomposed_action)
+        console.log("^^^^^^^^^decomposed_action^^^^^^^^^^")
 
         sendTokenTx.actions = [action];
+
+        // const fee = await sendTokenTx.getSuggestedFee(Models.TxExecutionPriority.Fast);
         
         await sendTokenTx.prepareToBeSigned()
         await sendTokenTx.validate()
         await sendTokenTx.sign(signing_keys);
+
+        //console.log(JSON.stringify(sendTokenTx))
+        console.log(sendTokenTx)
 
         var result :  Models.TransactionResult =  await sendTokenTx.send();
 

@@ -8,6 +8,10 @@ export function checkEnvVaraible(variableName: string) : number {
         console.warn("Environment Variable \"" + variableName + "\" was not not found of empty")
         return 1
     } else {
+        if(variableName.includes("private")) {
+            envVar = "********"
+        }
+        console.log(variableName + ' : ' + envVar);
         return 0
     }
 }
@@ -63,6 +67,18 @@ export function validateSettings(chainId: string, networkId: string, doMSIG: boo
                 errorCount += checkEnvVaraible("eth_ropsten_fromAccountName_MSIG");
                 errorCount += checkEnvVaraible("eth_ropsten_msig_1_privateKey");
                 errorCount += checkEnvVaraible("eth_ropsten_msig_2_privateKey");
+            }
+            break; 
+        }      
+        case "matic.polygon_mumbai": {             
+            errorCount += checkEnvVaraible("matic_polygon_mumbai_fromAccountName");
+            errorCount += checkEnvVaraible("matic_polygon_mumbai_toAccountName");
+            errorCount += checkEnvVaraible("matic_polygon_mumbai_privateKey");
+            if(doMSIG) {
+                Errors.throwNewError("Have not tested MSIG on ropsten yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("matic_polygon_mumbai_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("matic_polygon_mumbai_msig_1_privateKey");
+                errorCount += checkEnvVaraible("matic_polygon_mumbai_msig_2_privateKey");
             }
             break; 
         }         
