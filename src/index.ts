@@ -1,12 +1,16 @@
 import { validateSettings } from './helpers'
-import { Models } from '@open-rights-exchange/chain-js'
-
+import { Models, Helpers, Errors } from '@open-rights-exchange/chain-js'
+import { ETHTxnTypes, EOSTxnTypes, AlgorandTxnTypes, IOptionBag, TransactionBuilderResponse} from './models'
+import { EthereumTransactionBuilder } from './Ethereum'
+import { EOSTransactionBuilder } from './EOS'
+import { AlgorandTransactionBuilder } from './Algorand'
 
 // let chainId = "algorand", networkId = "testnet", doMSIG = false
 // let chainId = "eos", networkId = "jungle", doMSIG = false
 // let chainId = "eos", networkId = "kylin", doMSIG = false
 // let chainId = "eth", networkId = "ropsten", doMSIG = false
-let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false
+let chainId = "eth", networkId = "rinkeby", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
+// let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false
 
 //Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
 validateSettings(chainId, networkId, doMSIG);
@@ -14,26 +18,27 @@ validateSettings(chainId, networkId, doMSIG);
 import config from './chain.config'
 var configObj = config[chainId][networkId]
 
-var chainType = configObj.chainType;
-var endpoints : Models.ChainEndpoint[] = configObj.endpoints
-var chainSettings: any = configObj.chainSettings
-var fromAccountName = configObj.fromAccountName
-var fromAccountName_MSIG = configObj.fromAccountName_MSIG
-var toAccountName = configObj.toAccountName
-var symbol = configObj.symbol
-var permission = configObj.permission
-var privateKey_singleSign = configObj.privateKey_singleSign
-var privateKeys_MSIG = configObj.privateKeys_MSIG
-var transferAmount = configObj.transferAmount
-var precision = configObj.precision
-
+const options: IOptionBag = {
+    chainType: configObj.chainType,
+    endpoints: configObj.endpoints,
+    chainSettings: configObj.chainSettings,
+    fromAccountName: configObj.fromAccountName,
+    fromAccountName_MSIG: configObj.fromAccountName_MSIG,
+    toAccountName: configObj.toAccountName,
+    symbol: configObj.symbol,
+    permission: configObj.permission,
+    privateKey_singleSign: configObj.privateKey_singleSign,
+    privateKeys_MSIG: configObj.privateKeys_MSIG,
+    transferAmount: configObj.transferAmount,
+    precision: configObj.precision
+}
 
 // If we're doing an MSIG transaction then use the the keys defined in config.privateKeys_MSIG 
 // The from account also gets replaced with config.fromAccountName_MSIG as we need to test using an account that has a MSIG setup on it. 
-var signing_keys : string[] = [privateKey_singleSign]
+var signing_keys : string[] = [options.privateKey_singleSign]
 if(doMSIG) {
-    signing_keys = privateKeys_MSIG,
-    fromAccountName = fromAccountName_MSIG
+    signing_keys = options.privateKeys_MSIG,
+    options.fromAccountName = options.fromAccountName_MSIG
 }
 
 // console.log("sign with the following keys: " + signing_keys)
@@ -43,61 +48,114 @@ if(doMSIG) {
 */
 import { PluginChainFactory } from '@open-rights-exchange/chain-js'
 import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
-import { Plugin as EthereumPlugin, ModelsEthereum} from '@open-rights-exchange/chain-js-plugin-ethereum'
+import { Plugin as EthereumPlugin, ModelsEthereum, HelpersEthereum} from '@open-rights-exchange/chain-js-plugin-ethereum'
 import { Plugin as AlorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
-var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], chainType, endpoints, chainSettings);
+import { Transaction } from '@open-rights-exchange/chain-js';
+var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], options.chainType, options.endpoints, options.chainSettings);
+
+
 
 async function runTxn() {
 
     try {
+        var transaction : Transaction = null;
+        var action : any = null;
+
         await chain.connect()
 
-        var txnOptions = {
+        //If txnType is tokentransfer we use our generic code. Else we setup the transaction using one of the custom
+        if(txnType.toString() == "tokentransfer") {
+
+            var txnOptions = {
                 // gasLimit: "0x62D4", //25300 (25200 is default)
                 // gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)
             };
-        var sendTokenTx = await chain.new.Transaction(txnOptions);
+    
+            transaction = await chain.new.Transaction(txnOptions);
+    
+            var genericValueTransfer = {
+                fromAccountName: options.fromAccountName,
+                toAccountName: options.toAccountName,
+                amount: options.transferAmount,
+                symbol: options.symbol,
+                memo: 'Test',
+                permission: options.permission,
+                precision: options.precision,
+            }
 
-        var genericValueTransfer = {
-            fromAccountName,
-            toAccountName,
-            amount: transferAmount,
-            symbol,
-            memo: 'Test',
-            permission,
-            precision,
-            // gasLimit, gasPrice and nonce will only have an impact when running an ETH type transaction
-            // gasLimit: "0x62D4", //25300 (25200 is default)
-            // gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)
-            // nonce: "0x1"
-        }
+            action = await chain.composeAction(Models.ChainActionType.ValueTransfer, genericValueTransfer);
 
-        var action = await chain.composeAction(Models.ChainActionType.ValueTransfer, genericValueTransfer);
+        } else {
+            // If we're running any transaction that isn't a simple token transfer
+            // This case statement 
+            let response: TransactionBuilderResponse = null
+            switch(options.chainType) {
+                case Models.ChainType.EthereumV1: {
+                    response = await new EthereumTransactionBuilder().build(chain, options, (txnType as unknown) as ETHTxnTypes)
+                    break
+                }
+                case Models.ChainType.EosV2: {
+                    response = await new EOSTransactionBuilder().build(chain, options, (txnType as unknown) as EOSTxnTypes)
+                    break
+                }
+                case Models.ChainType.AlgorandV1: {
+                    response = await new AlgorandTransactionBuilder().build(chain, options, (txnType as unknown) as AlgorandTxnTypes)
+                    break
+                }
+                default: {
+                    Errors.throwNewError("Invalid ChainType")
+                }
+            }
+            transaction = response.transaction
+            action = response.action
+        } 
+
+        
+        //var action = await chain.composeAction(Models.ChainActionType.ValueTransfer, genericValueTransfer);
+        //var action = await chain.composeAction(ModelsEthereum.EthereumChainActionType.ERC20Transfer, Erc20ValueTransfer);
+        //var action = await chain.composeAction(ModelsEthereum.EthereumChainActionType.ERC721TransferFrom, Erc721TransferFrom);
+
+        // if(chainType === Models.ChainType.EthereumV1) {
+        //     action = {
+        //         ...action,
+        //         gasLimit: "0x62D4", //25300 (25200 is default)
+        //         gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)'
+        //         // nonce: "0x1"
+        //     }
+        // }
 
         //This should match our input
-        var decomposed_action = await chain.decomposeAction(action)
-        console.log("=========decomposed_action==========")
-        console.log(decomposed_action)
-        console.log("^^^^^^^^^decomposed_action^^^^^^^^^^")
+        // var decomposed_action = await chain.decomposeAction(action)
+        // console.log("=========decomposed_action==========")
+        // console.log(decomposed_action)
+        // console.log("^^^^^^^^^decomposed_action^^^^^^^^^^")
 
-        sendTokenTx.actions = [action];
+        console.log(action)
+        console.log("^^^^^^^^^action^^^^^^^^^^")
 
-        // const fee = await sendTokenTx.getSuggestedFee(Models.TxExecutionPriority.Fast);
+        transaction.actions = [action];
+
+        if(chain.supportsFee) {
+            const fee = await transaction.getSuggestedFee(Models.TxExecutionPriority.Fast);
+            const multiplier : number = 2
+            const finalPrice : string = (fee * multiplier).toString()
+            await transaction.setDesiredFee(finalPrice)
+        }
         
-        await sendTokenTx.prepareToBeSigned()
-        await sendTokenTx.validate()
-        await sendTokenTx.sign(signing_keys);
+        await transaction.prepareToBeSigned()
+        await transaction.validate()
+        await transaction.sign(signing_keys);
 
-        //console.log(JSON.stringify(sendTokenTx))
-        console.log(sendTokenTx)
+        //console.log(JSON.stringify(transaction))
+        console.log(transaction)
 
-        var result :  Models.TransactionResult =  await sendTokenTx.send();
+        var result :  Models.TransactionResult =  await transaction.send();
 
         console.log('transactionId:', result.transactionId)
-        console.log('hasAllRequiredSignatures:', sendTokenTx.hasAllRequiredSignatures)
-        console.log('actions:', JSON.stringify(sendTokenTx.actions))
-        console.log('header:', sendTokenTx.header)
-        console.log('signatures:', sendTokenTx.signatures)
+        console.log('hasAllRequiredSignatures:', transaction.hasAllRequiredSignatures)
+        console.log('actions:', JSON.stringify(transaction.actions))
+        console.log('header:', transaction.header)
+        console.log('signatures:', transaction.signatures)
     } catch(error) {
         console.log("There was an error: " + error);
     }

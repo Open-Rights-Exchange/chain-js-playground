@@ -69,6 +69,18 @@ export function validateSettings(chainId: string, networkId: string, doMSIG: boo
                 errorCount += checkEnvVaraible("eth_ropsten_msig_2_privateKey");
             }
             break; 
+        }     
+        case "eth.rinkeby": {             
+            errorCount += checkEnvVaraible("eth_rinkeby_fromAccountName");
+            errorCount += checkEnvVaraible("eth_rinkeby_toAccountName");
+            errorCount += checkEnvVaraible("eth_rinkeby_privateKey");
+            if(doMSIG) {
+                Errors.throwNewError("Have not tested MSIG on ropsten yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("eth_rinkeby_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("eth_rinkeby_msig_1_privateKey");
+                errorCount += checkEnvVaraible("eth_rinkeby_msig_2_privateKey");
+            }
+            break; 
         }      
         case "matic.polygon_mumbai": {             
             errorCount += checkEnvVaraible("matic_polygon_mumbai_fromAccountName");

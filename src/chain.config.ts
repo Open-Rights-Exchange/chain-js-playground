@@ -134,8 +134,40 @@ var settingObj : IAllChainSettings = {
             privateKeys_MSIG: [process.env.eth_ropsten_msig_1_privateKey],
             transferAmount: '10001',
             precision: 18
+        },
+        "rinkeby" :
+        {
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://rinkeby.infura.io/v3/b1664813d49f45c7a5bb42a395447977", 
+                    // options: {
+                    //     agent: "XXX",
+                    //     headers: [{"XXX" : "XXX"}]
+                    // }
+                }
+            ],
+            fromAccountName_MSIG : process.env.eth_rinkeby_fromAccountName_MSIG,
+            fromAccountName : process.env.eth_rinkeby_fromAccountName,
+            toAccountName: process.env.eth_rinkeby_toAccountName,
+            chainSettings: {
+                chainForkType : {
+                    chainName: "rinkeby",
+                    hardFork: "istanbul"
+                },
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                }
+            },
+            symbol: "gwei",
+            permission: null,
+            privateKey_singleSign : process.env.eth_rinkeby_privateKey ?? '',
+            privateKeys_MSIG: [process.env.eth_rinkeby_msig_1_privateKey],
+            transferAmount: '10001',
+            precision: 18
         }
-    },
+    },    
     "matic" : 
     {
         "polygon_mumbai" :
