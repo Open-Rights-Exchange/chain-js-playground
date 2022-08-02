@@ -16,10 +16,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@open-rights-exchange/chain-js": "^4.0.0",
-    "@open-rights-exchange/chain-js-plugin-algorand": "^4.0.2",
-    "@open-rights-exchange/chain-js-plugin-eos": "^4.0.1",
-    "@open-rights-exchange/chain-js-plugin-ethereum": "^4.0.1",
+    "@open-rights-exchange/chain-js": "^4.9.0",
+    "@open-rights-exchange/chain-js-plugin-algorand": "^4.9.0",
+    "@open-rights-exchange/chain-js-plugin-eos": "^4.9.0",
+    "@open-rights-exchange/chain-js-plugin-ethereum": "^4.9.0",
     "dotenv": "^10.0.0",
     "ts-node": "^10.4.0"
   },
