@@ -5,12 +5,12 @@ import { EthereumTransactionBuilder } from './Ethereum'
 import { EOSTransactionBuilder } from './EOS'
 import { AlgorandTransactionBuilder } from './Algorand'
 
-// let chainId = "algorand", networkId = "testnet", doMSIG = false
-// let chainId = "eos", networkId = "jungle", doMSIG = false
-// let chainId = "eos", networkId = "kylin", doMSIG = false
-// let chainId = "eth", networkId = "ropsten", doMSIG = false
+// let chainId = "algorand", networkId = "testnet", doMSIG = false, txnType = AlgorandTxnTypes.TokenTransfer
+// let chainId = "eos", networkId = "jungle", doMSIG = false, txnType = EOSTxnTypes.TokenTransfer
+// let chainId = "eos", networkId = "kylin", doMSIG = false, txnType = EOSTxnTypes.TokenTransfer
+// let chainId = "eth", networkId = "ropsten", doMSIG = false, txnType = EOSTxnTypes.TokenTransfer
 let chainId = "eth", networkId = "rinkeby", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
-// let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false
+// let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
 
 //Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
 validateSettings(chainId, networkId, doMSIG);
@@ -40,8 +40,6 @@ if(doMSIG) {
     signing_keys = options.privateKeys_MSIG,
     options.fromAccountName = options.fromAccountName_MSIG
 }
-
-// console.log("sign with the following keys: " + signing_keys)
 
 /*
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
@@ -109,29 +107,6 @@ async function runTxn() {
             transaction = response.transaction
             action = response.action
         } 
-
-        
-        //var action = await chain.composeAction(Models.ChainActionType.ValueTransfer, genericValueTransfer);
-        //var action = await chain.composeAction(ModelsEthereum.EthereumChainActionType.ERC20Transfer, Erc20ValueTransfer);
-        //var action = await chain.composeAction(ModelsEthereum.EthereumChainActionType.ERC721TransferFrom, Erc721TransferFrom);
-
-        // if(chainType === Models.ChainType.EthereumV1) {
-        //     action = {
-        //         ...action,
-        //         gasLimit: "0x62D4", //25300 (25200 is default)
-        //         gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)'
-        //         // nonce: "0x1"
-        //     }
-        // }
-
-        //This should match our input
-        // var decomposed_action = await chain.decomposeAction(action)
-        // console.log("=========decomposed_action==========")
-        // console.log(decomposed_action)
-        // console.log("^^^^^^^^^decomposed_action^^^^^^^^^^")
-
-        console.log(action)
-        console.log("^^^^^^^^^action^^^^^^^^^^")
 
         transaction.actions = [action];
 
