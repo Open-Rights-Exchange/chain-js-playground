@@ -4,7 +4,8 @@ export enum ETHTxnTypes {
     TokenTransfer = "tokentransfer",
     Erc721TransferFrom_raw = "erc721transferfrom_raw",
     Erc721TransferFrom_template = "erc721transferfrom_template",
-    SetGasPriceInTransaction_Builder = "setgaspriceintransaction"
+    SetGasPriceInTransaction_template = "setgaspriceintransaction",
+    CancelTransacton = "canceltransacton"
 }
 
 export enum EOSTxnTypes {
@@ -25,6 +26,7 @@ export interface ITransactionBuilder {
 }
 
 export type IOptionBag = {
+    defaultTransactionOptions: any,
     chainType: any,
     endpoints: Models.ChainEndpoint[],
     chainSettings: any

@@ -1,5 +1,5 @@
 import { validateSettings } from './helpers'
-import { Models, Helpers, Errors } from '@open-rights-exchange/chain-js'
+import { Models, Errors } from '@open-rights-exchange/chain-js'
 import { ETHTxnTypes, EOSTxnTypes, AlgorandTxnTypes, IOptionBag, TransactionBuilderResponse} from './models'
 import { EthereumTransactionBuilder } from './Ethereum'
 import { EOSTransactionBuilder } from './EOS'
@@ -9,7 +9,7 @@ import { AlgorandTransactionBuilder } from './Algorand'
 // let chainId = "eos", networkId = "jungle", doMSIG = false, txnType = EOSTxnTypes.TokenTransfer
 // let chainId = "eos", networkId = "kylin", doMSIG = false, txnType = EOSTxnTypes.TokenTransfer
 // let chainId = "eth", networkId = "ropsten", doMSIG = false, txnType = EOSTxnTypes.TokenTransfer
-let chainId = "eth", networkId = "rinkeby", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
+let chainId = "eth", networkId = "rinkeby", doMSIG = false, txnType = ETHTxnTypes.CancelTransacton
 // let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
 
 //Validate that all the env variables we're expecting exist, before importing our config object. Missing variables can cause confusing errors. 
@@ -19,6 +19,7 @@ import config from './chain.config'
 var configObj = config[chainId][networkId]
 
 const options: IOptionBag = {
+    defaultTransactionOptions: configObj.defaultTransactionOptions,
     chainType: configObj.chainType,
     endpoints: configObj.endpoints,
     chainSettings: configObj.chainSettings,
@@ -63,13 +64,8 @@ async function runTxn() {
 
         //If txnType is tokentransfer we use our generic code. Else we setup the transaction using one of the custom
         if(txnType.toString() == "tokentransfer") {
-
-            var txnOptions = {
-                // gasLimit: "0x62D4", //25300 (25200 is default)
-                // gasPrice: "0x3B9ACA0A", //1000000010 (1000000000 is default)
-            };
     
-            transaction = await chain.new.Transaction(txnOptions);
+            transaction = await chain.new.Transaction(options.defaultTransactionOptions);
     
             var genericValueTransfer = {
                 fromAccountName: options.fromAccountName,
@@ -110,23 +106,23 @@ async function runTxn() {
 
         transaction.actions = [action];
 
-        if(chain.supportsFee) {
-            const fee = await transaction.getSuggestedFee(Models.TxExecutionPriority.Fast);
-            const multiplier : number = 2
-            const finalPrice : string = (fee * multiplier).toString()
-            await transaction.setDesiredFee(finalPrice)
-        }
+        // if(chain.supportsFee) {
+        //     const feeResult = await transaction.getSuggestedFee(Models.TxExecutionPriority.Fast);
+        //     await transaction.setDesiredFee(feeResult.feeStringified)
+        // }
         
         await transaction.prepareToBeSigned()
         await transaction.validate()
         await transaction.sign(signing_keys);
 
         //console.log(JSON.stringify(transaction))
-        console.log(transaction)
+        //console.log(transaction)
 
         var result :  Models.TransactionResult =  await transaction.send();
-
         console.log('transactionId:', result.transactionId)
+
+        console.log(`gasPrice\\gasLimit: ${transaction.actions[0].gasPrice} \ ${transaction.actions[0].gasLimit} `)
+        console.log(`gasPrice\\gasLimit: ${parseInt(transaction.actions[0].gasPrice, 16)} \ ${parseInt(transaction.actions[0].gasLimit, 16)} `)
         console.log('hasAllRequiredSignatures:', transaction.hasAllRequiredSignatures)
         console.log('actions:', JSON.stringify(transaction.actions))
         console.log('header:', transaction.header)

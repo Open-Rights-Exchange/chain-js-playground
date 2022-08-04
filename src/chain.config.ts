@@ -17,6 +17,7 @@ import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chain-js-
 import { HelpersAlgorand } from '@open-rights-exchange/chain-js-plugin-algorand'
 
 export interface IChainSettings {
+    defaultTransactionOptions : any,
     chainType : Models.ChainType,
     endpoints : [Models.ChainEndpoint]
     chainSettings : ModelsEthereum.EthereumChainForkType|any,
@@ -43,6 +44,7 @@ var settingObj : IAllChainSettings = {
     {
         "jungle" :
         {
+            defaultTransactionOptions: {},
             chainType: Models.ChainType.EosV2,
             endpoints:  [{url : "https://jungle3.cryptolions.io:443"}],     
             fromAccountName_MSIG : process.env.eos_jungle_fromAccountName_MSIG,    
@@ -61,6 +63,7 @@ var settingObj : IAllChainSettings = {
         },
         "kylin" :
         {
+            defaultTransactionOptions: {},
             chainType: Models.ChainType.EosV2,
             endpoints:  [{url : "https://kylin.eosn.io:443"}],
             fromAccountName_MSIG : process.env.eos_kylin_fromAccountName_MSIG,
@@ -79,6 +82,7 @@ var settingObj : IAllChainSettings = {
     {
         "testnet" :
         {
+            defaultTransactionOptions: {},
             chainType: Models.ChainType.AlgorandV1,
             endpoints:  [{
                     url: 'https://testnet-algorand.api.purestake.io/ps2',
@@ -105,6 +109,7 @@ var settingObj : IAllChainSettings = {
     {
         "ropsten" :
         {
+            defaultTransactionOptions: {},
             chainType: Models.ChainType.EthereumV1,
             endpoints:  [
                 {
@@ -137,6 +142,13 @@ var settingObj : IAllChainSettings = {
         },
         "rinkeby" :
         {
+            defaultTransactionOptions: {
+                feeMultipliers: {
+                    [Models.TxExecutionPriority.Slow]: 2,
+                    [Models.TxExecutionPriority.Average]: 2,
+                    [Models.TxExecutionPriority.Fast]: 2,
+                  }
+            },
             chainType: Models.ChainType.EthereumV1,
             endpoints:  [
                 {
@@ -172,6 +184,7 @@ var settingObj : IAllChainSettings = {
     {
         "polygon_mumbai" :
         {
+            defaultTransactionOptions: {},
             chainType: Models.ChainType.EthereumV1,
             endpoints:  [
                 {

@@ -3,6 +3,7 @@ import { AlgorandTxnTypes, EOSTxnTypes, ETHTxnTypes, IOptionBag, ITransactionBui
 import { ERC721TransferFrom_raw_Builder } from './ERC721TransferFrom_raw'
 import { ERC721TransferFrom_template_Builder } from './ERC721TransferFrom_template'
 import { SetGasPriceInTransaction_Builder } from './SetGasPriceInTransaction'
+import { CancelTransacton_Builder } from './CancelTransacton_template'
 
 export class EthereumTransactionBuilder implements ITransactionBuilder {
 
@@ -17,10 +18,14 @@ export class EthereumTransactionBuilder implements ITransactionBuilder {
                 response = await new ERC721TransferFrom_template_Builder().build(chain, options, txnType);
                 break
             }
-            case(ETHTxnTypes.SetGasPriceInTransaction_Builder): {
+            case(ETHTxnTypes.SetGasPriceInTransaction_template): {
                 response = await new SetGasPriceInTransaction_Builder().build(chain, options, txnType);
                 break
-            }            
+            }    
+            case(ETHTxnTypes.CancelTransacton): {
+                response = await new CancelTransacton_Builder().build(chain, options, txnType);
+                break
+            }
             default: {
                 Errors.throwNewError("txnType " + txnType.toString() + " is not yet implemented")
             }
