@@ -4,6 +4,11 @@ import { ERC721TransferFrom_raw_Builder } from './ERC721TransferFrom_raw'
 import { ERC721TransferFrom_template_Builder } from './ERC721TransferFrom_template'
 import { SetGasPriceInTransaction_Builder } from './SetGasPriceInTransaction'
 import { CancelTransacton_Builder } from './CancelTransacton_template'
+import { SmartContractInteraction } from './SmartContractInteraction'
+import { Multisig } from './Multisig'
+import { ERC20TransferFrom_raw } from './ERC20TransferFrom_raw'
+import { ERC1155TransferFrom_template_Builder } from './ERC1155TransferFrom_template'
+import { ERC1155SafeTransferFrom_raw_Builder } from './ERC1155SafeTransferFrom_raw'
 
 export class EthereumTransactionBuilder implements ITransactionBuilder {
 
@@ -24,6 +29,26 @@ export class EthereumTransactionBuilder implements ITransactionBuilder {
             }    
             case(ETHTxnTypes.CancelTransacton): {
                 response = await new CancelTransacton_Builder().build(chain, options, txnType);
+                break
+            }
+            case(ETHTxnTypes.SmartContractInteraction): {
+                response = await new SmartContractInteraction().build(chain, options, txnType);
+                break
+            }
+            case(ETHTxnTypes.Multisig): {
+                response = await new Multisig().build(chain, options, txnType);
+                break
+            }
+            case(ETHTxnTypes.ERC20TransferFrom_raw): {
+                response = await new ERC20TransferFrom_raw().build(chain, options, txnType);
+                break
+            }
+            case(ETHTxnTypes.Erc1155TransferFrom_template): {
+                response = await new ERC1155TransferFrom_template_Builder().build(chain, options, txnType);
+                break
+            }
+            case(ETHTxnTypes.Erc1155SafeTransferFrom_raw): {
+                response = await new ERC1155SafeTransferFrom_raw_Builder().build(chain, options, txnType);
                 break
             }
             default: {

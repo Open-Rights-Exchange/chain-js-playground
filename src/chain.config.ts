@@ -15,6 +15,7 @@ import { Models, CryptoHelpers, Helpers } from '@open-rights-exchange/chain-js'
 import { HelpersEos } from '@open-rights-exchange/chain-js-plugin-eos'
 import { HelpersEthereum, ModelsEthereum } from '@open-rights-exchange/chain-js-plugin-ethereum'
 import { HelpersAlgorand } from '@open-rights-exchange/chain-js-plugin-algorand'
+import { Common } from '@ethereumjs/common'
 
 export interface IChainSettings {
     defaultTransactionOptions : any,
@@ -38,6 +39,19 @@ export interface IAllChainSettings {
             [subId: string] : IChainSettings
     }
 }
+
+const customCommon = Common.custom(
+    {
+      name: 'fuji',
+      networkId: 43113,
+      chainId: 5,
+    },
+    {
+      baseChain: 'mainnet',
+      hardfork: 'petersburg',
+    }
+  )
+
 
 var settingObj : IAllChainSettings = {
     "eos" : 
@@ -136,7 +150,7 @@ var settingObj : IAllChainSettings = {
             symbol: "gwei",
             permission: null,
             privateKey_singleSign : process.env.eth_ropsten_privateKey ?? '',
-            privateKeys_MSIG: [process.env.eth_ropsten_msig_1_privateKey],
+            privateKeys_MSIG: [process.env.eth_ropsten_msig_1_privateKey, process.env.eth_ropsten_msig_2_privateKey, process.env.eth_ropsten_msig_3_privateKey],
             transferAmount: '10001',
             precision: 18
         },
@@ -172,11 +186,50 @@ var settingObj : IAllChainSettings = {
                     executionPriority: Models.TxExecutionPriority.Fast,
                 }
             },
-            symbol: "gwei",
+            symbol: "wei",
             permission: null,
             privateKey_singleSign : process.env.eth_rinkeby_privateKey ?? '',
             privateKeys_MSIG: [process.env.eth_rinkeby_msig_1_privateKey],
-            transferAmount: '10001',
+            transferAmount: '0',
+            precision: 18
+        },
+        "goerli" :
+        {
+            defaultTransactionOptions: {
+                feeMultipliers: {
+                    [Models.TxExecutionPriority.Slow]: 2,
+                    [Models.TxExecutionPriority.Average]: 2,
+                    [Models.TxExecutionPriority.Fast]: 2,
+                  }
+            },
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://goerli.infura.io/v3/d9cdd6a730b44793becb790e3a3ac372", 
+                    // options: {
+                    //     agent: "XXX",
+                    //     headers: [{"XXX" : "XXX"}]
+                    // }
+                }
+            ],
+            fromAccountName_MSIG : process.env.eth_goerli_fromAccountName_MSIG,
+            fromAccountName : process.env.eth_goerli_fromAccountName,
+            toAccountName: process.env.eth_goerli_toAccountName,
+            chainSettings: {
+                chainForkType : {
+                    chainName: "goerli",
+                    hardFork: "istanbul"
+                },
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                }
+            },
+            symbol: "wei",
+            permission: null,
+            privateKey_singleSign : process.env.eth_goerli_privateKey ?? '',
+            privateKeys_MSIG: [process.env.eth_goerli_msig_1_privateKey],
+            transferAmount: '1',
             precision: 18
         }
     },    
@@ -209,6 +262,179 @@ var settingObj : IAllChainSettings = {
             privateKey_singleSign : process.env.matic_polygon_mumbai_privateKey ?? '',
             privateKeys_MSIG: [process.env.matic_polygon_mumbai_msig_1_privateKey],
             transferAmount: '1',
+            precision: 18
+        }
+    },    
+    "avalanche" : 
+    {
+        "fuji" :
+        {
+            // defaultTransactionOptions: {
+            //     chain: 'booba',
+            //     hardfork: 'yipee'
+            // },
+            defaultTransactionOptions: {},
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://api.avax-test.network/ext/bc/C/rpc", 
+                }
+            ],
+            fromAccountName_MSIG : process.env.avalanche_fuji_fromAccountName_MSIG,
+            fromAccountName : process.env.avalanche_fuji_fromAccountName,
+            toAccountName: process.env.avalanche_fuji_toAccountName,
+            chainSettings: {
+                chainForkType : {
+                    chainName: {chainId: 43113},
+                },
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                },
+                ethereumTokenEquivalenceMapping: { // https://eth-converter.com/extended-converter.html
+                    TAVAX: "Tether",
+                    GAVAX: "Gether",
+                    MAVAX: "Mether",
+                    kAVAX: "Kether",
+                    AVAX: "Ether",
+                    mAVAX: "Finney", // Note that there is also a MAVAX
+                    uAVAX: "Szabo",
+                    nAVAX: "Gwei",
+                    MWei: "Mwei",
+                    KWei: "Kwei",
+                    Wei: "Wei"
+                }
+            },
+            symbol: "AVAX",
+            permission: null,
+            privateKey_singleSign : process.env.avalanche_fuji_privateKey ?? '',
+            privateKeys_MSIG: [process.env.avalanche_fuji_msig_1_privateKey],
+            transferAmount: '0.0001',
+            precision: 18
+        },
+        "mainnet" :
+        {
+            // defaultTransactionOptions: {
+            //     chain: 'booba',
+            //     hardfork: 'yipee'
+            // },
+            defaultTransactionOptions: {},
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://api.avax.network/ext/bc/C/rpc", 
+                }
+            ],
+            fromAccountName_MSIG : process.env.avalanche_fuji_fromAccountName_MSIG,
+            fromAccountName : process.env.avalanche_fuji_fromAccountName,
+            toAccountName: process.env.avalanche_fuji_toAccountName,
+            chainSettings: {
+                chainForkType : {
+                    chainName: {chainId: 43114},
+                },
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                },
+                ethereumTokenEquivalenceMapping: { // https://eth-converter.com/extended-converter.html
+                    TAVAX: "Tether",
+                    GAVAX: "Gether",
+                    MAVAX: "Mether",
+                    kAVAX: "Kether",
+                    AVAX: "Ether",
+                    mAVAX: "Finney", // Note that there is also a MAVAX
+                    uAVAX: "Szabo",
+                    nAVAX: "Gwei",
+                    MWei: "Mwei",
+                    KWei: "Kwei",
+                    Wei: "Wei"
+                }
+            },
+            symbol: "AVAX",
+            permission: null,
+            privateKey_singleSign : process.env.avalanche_fuji_privateKey ?? '',
+            privateKeys_MSIG: [process.env.avalanche_fuji_msig_1_privateKey],
+            transferAmount: '0.0001',
+            precision: 18
+        }
+    },    
+    "telosevm" : 
+    {
+        "testnet" :
+        {
+            defaultTransactionOptions: {},
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://testnet.telos.net/evm", 
+                }
+            ],
+            fromAccountName_MSIG : process.env.avalanche_fuji_fromAccountName_MSIG,
+            fromAccountName : process.env.avalanche_fuji_fromAccountName,
+            toAccountName: process.env.avalanche_fuji_toAccountName,
+            chainSettings: {
+                chainForkType : {
+                    chainName: {chainId: 41},
+                },
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                },
+                ethereumTokenEquivalenceMapping: { // https://eth-converter.com/extended-converter.html
+                    TLOS: "Ether",
+                    tlos: "Ether",
+                }
+            },
+            symbol: "tlos",
+            permission: null,
+            privateKey_singleSign : process.env.avalanche_fuji_privateKey ?? '',
+            privateKeys_MSIG: [process.env.avalanche_fuji_msig_1_privateKey],
+            transferAmount: '0.1',
+            precision: 18
+        },
+        "mainnet" :
+        {
+            // defaultTransactionOptions: {
+            //     chain: 'booba',
+            //     hardfork: 'yipee'
+            // },
+            defaultTransactionOptions: {},
+            chainType: Models.ChainType.EthereumV1,
+            endpoints:  [
+                {
+                    url : "https://api.avax.network/ext/bc/C/rpc", 
+                }
+            ],
+            fromAccountName_MSIG : process.env.avalanche_mainnet_fromAccountName_MSIG,
+            fromAccountName : process.env.avalanche_mainnet_fromAccountName,
+            toAccountName: process.env.avalanche_mainnet_toAccountName,
+            chainSettings: {
+                chainForkType : {
+                    chainName: {chainId: 43114},
+                },
+                defaultTransactionSettings: {
+                    maxFeeIncreasePercentage: 20,
+                    executionPriority: Models.TxExecutionPriority.Fast,
+                },
+                ethereumTokenEquivalenceMapping: { // https://eth-converter.com/extended-converter.html
+                    TAVAX: "Tether",
+                    GAVAX: "Gether",
+                    MAVAX: "Mether",
+                    kAVAX: "Kether",
+                    AVAX: "Ether",
+                    mAVAX: "Finney", // Note that there is also a MAVAX
+                    uAVAX: "Szabo",
+                    nAVAX: "Gwei",
+                    MWei: "Mwei",
+                    KWei: "Kwei",
+                    Wei: "Wei"
+                }
+            },
+            symbol: "AVAX",
+            permission: null,
+            privateKey_singleSign : process.env.avalanche_mainnet_privateKey ?? '',
+            privateKeys_MSIG: [process.env.avalanche_mainnet_msig_1_privateKey],
+            transferAmount: '0.0001',
             precision: 18
         }
     }

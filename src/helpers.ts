@@ -63,7 +63,7 @@ export function validateSettings(chainId: string, networkId: string, doMSIG: boo
             errorCount += checkEnvVaraible("eth_ropsten_toAccountName");
             errorCount += checkEnvVaraible("eth_ropsten_privateKey");
             if(doMSIG) {
-                Errors.throwNewError("Have not tested MSIG on ropsten yet + have not updated .env example ... contact warrick@aikon.com")
+                // Errors.throwNewError("Have not tested MSIG on ropsten yet + have not updated .env example ... contact warrick@aikon.com")
                 errorCount += checkEnvVaraible("eth_ropsten_fromAccountName_MSIG");
                 errorCount += checkEnvVaraible("eth_ropsten_msig_1_privateKey");
                 errorCount += checkEnvVaraible("eth_ropsten_msig_2_privateKey");
@@ -75,25 +75,85 @@ export function validateSettings(chainId: string, networkId: string, doMSIG: boo
             errorCount += checkEnvVaraible("eth_rinkeby_toAccountName");
             errorCount += checkEnvVaraible("eth_rinkeby_privateKey");
             if(doMSIG) {
-                Errors.throwNewError("Have not tested MSIG on ropsten yet + have not updated .env example ... contact warrick@aikon.com")
+                // Errors.throwNewError("Have not tested MSIG on rinkeby yet + have not updated .env example ... contact warrick@aikon.com")
                 errorCount += checkEnvVaraible("eth_rinkeby_fromAccountName_MSIG");
                 errorCount += checkEnvVaraible("eth_rinkeby_msig_1_privateKey");
                 errorCount += checkEnvVaraible("eth_rinkeby_msig_2_privateKey");
             }
             break; 
-        }      
+        }
+        case "eth.goerli": {             
+            errorCount += checkEnvVaraible("eth_goerli_fromAccountName");
+            errorCount += checkEnvVaraible("eth_goerli_toAccountName");
+            errorCount += checkEnvVaraible("eth_goerli_privateKey");
+            if(doMSIG) {
+                // Errors.throwNewError("Have not tested MSIG on goerli yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("eth_goerli_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("eth_goerli_msig_1_privateKey");
+                errorCount += checkEnvVaraible("eth_goerli_msig_2_privateKey");
+            }
+            break; 
+        }       
         case "matic.polygon_mumbai": {             
             errorCount += checkEnvVaraible("matic_polygon_mumbai_fromAccountName");
             errorCount += checkEnvVaraible("matic_polygon_mumbai_toAccountName");
             errorCount += checkEnvVaraible("matic_polygon_mumbai_privateKey");
             if(doMSIG) {
-                Errors.throwNewError("Have not tested MSIG on ropsten yet + have not updated .env example ... contact warrick@aikon.com")
+                Errors.throwNewError("Have not tested MSIG on matic yet + have not updated .env example ... contact warrick@aikon.com")
                 errorCount += checkEnvVaraible("matic_polygon_mumbai_fromAccountName_MSIG");
                 errorCount += checkEnvVaraible("matic_polygon_mumbai_msig_1_privateKey");
                 errorCount += checkEnvVaraible("matic_polygon_mumbai_msig_2_privateKey");
             }
             break; 
-        }         
+        }  
+        case "avalanche.fuji": {             
+            errorCount += checkEnvVaraible("avalanche_fuji_fromAccountName");
+            errorCount += checkEnvVaraible("avalanche_fuji_toAccountName");
+            errorCount += checkEnvVaraible("avalanche_fuji_privateKey");
+            if(doMSIG) {
+                Errors.throwNewError("Have not tested MSIG on avalanche fuji yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("avalanche_fuji_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("avalanche_fuji_msig_1_privateKey");
+                errorCount += checkEnvVaraible("avalanche_fuji_mumbai_msig_2_privateKey");
+            }
+            break; 
+        }
+        case "avalanche.mainnet": {             
+            errorCount += checkEnvVaraible("avalanche_mainnet_fromAccountName");
+            errorCount += checkEnvVaraible("avalanche_mainnet_toAccountName");
+            errorCount += checkEnvVaraible("avalanche_mainnet_privateKey");
+            if(doMSIG) {
+                Errors.throwNewError("Have not tested MSIG on avalanche mainnet yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("avalanche_mainnet_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("avalanche_mainnet_msig_1_privateKey");
+                errorCount += checkEnvVaraible("avalanche_mainnet_mumbai_msig_2_privateKey");
+            }
+            break; 
+        }
+        case "telosevm.testnet": {             
+            errorCount += checkEnvVaraible("telosevm_testnet_fromAccountName");
+            errorCount += checkEnvVaraible("telosevm_testnet_toAccountName");
+            errorCount += checkEnvVaraible("telosevm_testnet_privateKey");
+            if(doMSIG) {
+                Errors.throwNewError("Have not tested MSIG on telosevm testnet yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("telosevm_testnet_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("telosevm_testnet_msig_1_privateKey");
+                errorCount += checkEnvVaraible("telosevm_testnet_mumbai_msig_2_privateKey");
+            }
+            break; 
+        }        
+        case "telosevm.mainnet": {             
+            errorCount += checkEnvVaraible("telosevm_mainnet_fromAccountName");
+            errorCount += checkEnvVaraible("telosevm_mainnet_toAccountName");
+            errorCount += checkEnvVaraible("telosevm_mainnet_privateKey");
+            if(doMSIG) {
+                Errors.throwNewError("Have not tested MSIG on telosevm mainnet yet + have not updated .env example ... contact warrick@aikon.com")
+                errorCount += checkEnvVaraible("telosevm_mainnet_fromAccountName_MSIG");
+                errorCount += checkEnvVaraible("telosevm_mainnet_msig_1_privateKey");
+                errorCount += checkEnvVaraible("telosevm_mainnet_mumbai_msig_2_privateKey");
+            }
+            break; 
+        }
         default: { 
             console.warn("No setting validation was done for " + settingPath)
             return true;

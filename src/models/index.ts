@@ -5,7 +5,12 @@ export enum ETHTxnTypes {
     Erc721TransferFrom_raw = "erc721transferfrom_raw",
     Erc721TransferFrom_template = "erc721transferfrom_template",
     SetGasPriceInTransaction_template = "setgaspriceintransaction",
-    CancelTransacton = "canceltransacton"
+    CancelTransacton = "canceltransacton",
+    SmartContractInteraction = "smartcontractinteraction",
+    Multisig = "multisig",
+    ERC20TransferFrom_raw = "erc20transferfrom_raw",
+    Erc1155TransferFrom_template = "erc1155transferfrom_template",
+    Erc1155SafeTransferFrom_raw = "erc1155safeTransferFrom_raw"
 }
 
 export enum EOSTxnTypes {

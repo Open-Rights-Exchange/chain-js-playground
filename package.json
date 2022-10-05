@@ -16,12 +16,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@ethereumjs/common": "^3.0.0",
     "@open-rights-exchange/chain-js": "^4.9.0",
     "@open-rights-exchange/chain-js-plugin-algorand": "^4.9.0",
     "@open-rights-exchange/chain-js-plugin-eos": "^4.9.0",
     "@open-rights-exchange/chain-js-plugin-ethereum": "^4.9.0",
     "dotenv": "^10.0.0",
-    "ts-node": "^10.4.0"
+    "ts-node": "^10.4.0",
+    "web3": "^1.7.5"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
@@ -31,8 +33,8 @@
     "ts-node": "^10.4.0",
     "tsconfig-paths": "^3.11.0",
     "typescript": "^4.4.4",
-    "webpack-cli": "^4.9.1",
-    "webpack": "^5.66.0"
+    "webpack": "^5.66.0",
+    "webpack-cli": "^4.9.1"
   },
   "_comment": "@types/jest - Even though we don't need this in this package. If you don't have this you'll get errors when the chainjs library is referenced - not sure why at this point"
 }

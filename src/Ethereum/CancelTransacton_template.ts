@@ -3,14 +3,15 @@ import { HelpersEthereum, ModelsEthereum, Plugin as EthereumPlugin, } from "@ope
 import { ETHTxnTypes, IOptionBag, ITransactionBuilder, TransactionBuilderResponse } from "src/models";
 
 export class CancelTransacton_Builder implements ITransactionBuilder {
-    async build(chain: EthereumPlugin, options: IOptionBag, txnType: ETHTxnTypes): Promise<TransactionBuilderResponse> {
+    async build(chain: Chain, options: IOptionBag, txnType: ETHTxnTypes): Promise<TransactionBuilderResponse> {
 
+        var ethChain = chain as EthereumPlugin
 
         var transaction : Transaction = await chain.new.Transaction(options.defaultTransactionOptions)
 
-        const numberOfTransactionsExecuted : number = await chain.web3.eth.getTransactionCount(options.fromAccountName, 'latest')
+        const numberOfTransactionsExecuted : number = await ethChain.web3.eth.getTransactionCount(options.fromAccountName, 'latest')
         const highestNonceExecuted: number = numberOfTransactionsExecuted - 1
-        const numberOfTransactionsPending: number = await chain.web3.eth.getTransactionCount(options.fromAccountName, 'pending')
+        const numberOfTransactionsPending: number = await ethChain.web3.eth.getTransactionCount(options.fromAccountName, 'pending')
         const highestNoncePending: number = numberOfTransactionsPending - 1
 
         console.log(`last nonce executed: ${highestNonceExecuted} ${Helpers.decimalToHexString(highestNonceExecuted.toString())}`)
@@ -26,7 +27,7 @@ export class CancelTransacton_Builder implements ITransactionBuilder {
         }
 
         var nonce = Helpers.decimalToHexString((highestNonceExecuted + 1).toString())
-        var gasLimit = Helpers.decimalToHexString((21000+4).toString()) //Error Returned error: intrinsic gas too low
+        var gasLimit = Helpers.decimalToHexString((21000+6).toString()) //Error Returned error: intrinsic gas too low
         var gasPrice = Helpers.decimalToHexString("2000000020")
 
         var txn : ModelsEthereum.EthTransferParams = {
