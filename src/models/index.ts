@@ -10,7 +10,8 @@ export enum ETHTxnTypes {
     Multisig = "multisig",
     ERC20TransferFrom_raw = "erc20transferfrom_raw",
     Erc1155TransferFrom_template = "erc1155transferfrom_template",
-    Erc1155SafeTransferFrom_raw = "erc1155safeTransferFrom_raw"
+    Erc1155SafeTransferFrom_raw = "erc1155safeTransferFrom_raw",
+    Erc712Sign_typed_data_raw = "erc712sign_typed_data_raw"
 }
 
 export enum EOSTxnTypes {
