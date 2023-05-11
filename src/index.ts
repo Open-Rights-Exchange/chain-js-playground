@@ -49,12 +49,12 @@ const options: IOptionBag = {
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
 import { PluginChainFactory } from '@open-rights-exchange/chain-js'
-import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
+// import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
 import { Plugin as EthereumPlugin, ModelsEthereum, HelpersEthereum, GnosisSafeMultisigPlugin, EthereumTransaction, MultisigPlugin} from '@open-rights-exchange/chain-js-plugin-ethereum'
-import { Plugin as AlorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
+// import { Plugin as AlgorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
 import { Transaction } from '@open-rights-exchange/chain-js';
 import { SignString } from '../../chain-js/src/interfaces'
-var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], options.chainType, options.endpoints, options.chainSettings);
+var chain = PluginChainFactory([EthereumPlugin], options.chainType, options.endpoints, options.chainSettings);
 
 async function runTxn() {
 
@@ -202,52 +202,15 @@ async function runTxn() {
 
 }
 
-async function runSignString() {
+
+async function runSignMessage() {
     try {
 
-        const eip712_domain = {
-            name: "name",
-            version: "1",
-            verifyingContract: "0xB6Fa4E9B48F6fAcd8746573d8e151175c40121C7",
-            chainId: 1,
-        };
-      
-        const eip712_types = {
-            MyTypeA: [
-                {name:"sender",type:"address"},
-                {name:"x",type:"uint"},
-                {name:"deadline", type:"uint"}
-            ]
-        };
-  
-        var milsec_deadline = Date.now() / 1000 + 100;
-        console.log(milsec_deadline, "milisec");
-        var deadline = parseInt(String(milsec_deadline).slice(0, 10));
-        const x = 5;
-
-        const input = {
-            version: 4,
-            types: eip712_types,
-            primaryType: "MyTypeA",
-            domain: eip712_domain,
-            message: {
-                sender: options.fromAccountName,
-                x,
-                deadline
-            },
-        }
-
-        const input2 = {
+        const inputMessage = {
             stringToSign: "Something to sign here"
         }
 
-        let signStringOptions = {signMethod : 'ethereum.sign-typed-data'}
-        // let signStringOptions = {signMethod : 'ethereum.personal-sign'}
-        // let signStringOptions = {signMethod : 'ethereum.eth-sign'}
-
-        var signString : SignString = null;
-
-        signString = await chain.new.SignString(input, signStringOptions)
+        signString = await chain.new.SignString(inputMessage)
         let validateResult = await signString.validate();
         if(!validateResult.valid) {
             console.log('Oh no, it was not valid')
@@ -256,6 +219,54 @@ async function runSignString() {
         } else {
             let result = await signString.sign([options.privateKey_singleSign]);
             console.log(result)
+        }
+
+        if(chain.supportsTypedDataSignature){
+            let signStringOptions = {signMethod : 'ethereum.sign-typed-data'}
+            const eip712_domain = {
+                name: "name",
+                version: "1",
+                verifyingContract: "0xB6Fa4E9B48F6fAcd8746573d8e151175c40121C7",
+                chainId: 1,
+            };
+          
+            const eip712_types = {
+                MyTypeA: [
+                    {name:"sender",type:"address"},
+                    {name:"x",type:"uint"},
+                    {name:"deadline", type:"uint"}
+                ]
+            };
+      
+            var milsec_deadline = Date.now() / 1000 + 100;
+            console.log(milsec_deadline, "milisec");
+            var deadline = parseInt(String(milsec_deadline).slice(0, 10));
+            const x = 5;
+    
+            const input = {
+                version: 4,
+                types: eip712_types,
+                primaryType: "MyTypeA",
+                domain: eip712_domain,
+                message: {
+                    sender: options.fromAccountName,
+                    x,
+                    deadline
+                },
+            }
+
+            var signString : SignString = null;
+
+            signString = await chain.new.SignString(input, signStringOptions)
+            let validateResult = await signString.validate();
+            if(!validateResult.valid) {
+                console.log('Oh no, it was not valid')
+                console.log(validateResult.message)
+                console.log(validateResult.example)
+            } else {
+                let result = await signString.sign([options.privateKey_singleSign]);
+                console.log(result)
+            }
         }
 
 
@@ -267,8 +278,8 @@ async function runSignString() {
 
 ;(async () => {
     if(chain) {
-        //await runTxn()
-        await runSignString()
+        await runTxn()
+        await runSignMessage()
         process.exit()
     }
 })()

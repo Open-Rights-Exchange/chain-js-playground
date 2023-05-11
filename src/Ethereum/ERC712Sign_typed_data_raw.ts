@@ -8,7 +8,7 @@ import { ETHTxnTypes, IOptionBag, ITransactionBuilder, TransactionBuilderRespons
 //  code=INVALID_ARGUMENT, version=hash/5.6.1)
 
 
-export const ERC20ABI = [
+export const ERC712ABI = [
   {
     "constant": true,
     "inputs": [] as any[],
@@ -89,27 +89,18 @@ export class ERC712Sign_typed_data_raw_builder implements ITransactionBuilder {
             {name:"deadline", type:"uint"}
           ]
         };
-    
-        // ,
-        //   EIP712Domain: [
-        //     {name: "name", type: "string"},
-        //     {name: "version", type: "string"},
-        //     {name: "chainId", type: "uint256"},
-        //     {name: "verifyingContract", type: "address"},
-        //   ],
 
         var milsec_deadline = Date.now() / 1000 + 100;
         console.log(milsec_deadline, "milisec");
         var deadline = parseInt(String(milsec_deadline).slice(0, 10));
 
-        // const deadline = 100;
         const x = 5;          
 
         const action : any = {
           from: options.fromAccountName,
           to: '0xE79e5dfbdaeb5bF5395A760FB0F7a5A71466234b',
           contract: {
-            abi: ERC20ABI,
+            abi: ERC712ABI,
             method: 'executeSetIfSignatureMatch',
             //parameters: ["$eip712_v","$eip712_r","$eip712_s",options.fromAccountName, deadline, x],
             parameters: [0,"0x00","0x00",options.fromAccountName, deadline, x],
