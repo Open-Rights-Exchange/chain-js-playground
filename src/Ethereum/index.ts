@@ -9,6 +9,7 @@ import { Multisig } from './Multisig'
 import { ERC20TransferFrom_raw } from './ERC20TransferFrom_raw'
 import { ERC1155TransferFrom_template_Builder } from './ERC1155TransferFrom_template'
 import { ERC1155SafeTransferFrom_raw_Builder } from './ERC1155SafeTransferFrom_raw'
+import { ERC712Sign_typed_data_raw_builder } from './ERC712Sign_typed_data_raw'
 
 export class EthereumTransactionBuilder implements ITransactionBuilder {
 
@@ -49,6 +50,10 @@ export class EthereumTransactionBuilder implements ITransactionBuilder {
             }
             case(ETHTxnTypes.Erc1155SafeTransferFrom_raw): {
                 response = await new ERC1155SafeTransferFrom_raw_Builder().build(chain, options, txnType);
+                break
+            }
+            case(ETHTxnTypes.Erc712Sign_typed_data_raw): {
+                response = await new ERC712Sign_typed_data_raw_builder().build(chain, options, txnType);
                 break
             }
             default: {

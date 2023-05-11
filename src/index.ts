@@ -13,7 +13,8 @@ import { AlgorandTransactionBuilder } from './Algorand'
 // let chainId = "eth", networkId = "goerli", doMSIG = false, txnType = ETHTxnTypes.ERC20TransferFrom_raw
 // let chainId = "matic", networkId = "polygon_mumbai", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
 // let chainId = "avalanche", networkId = "fuji", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
-let chainId = "avalanche", networkId = "mainnet", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
+//let chainId = "avalanche", networkId = "mainnet", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
+let chainId = "eth", networkId = "goerli", doMSIG = false, txnType = ETHTxnTypes.Erc712Sign_typed_data_raw
 // let chainId = "telosevm", networkId = "testnet", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
 // let chainId = "telosevm", networkId = "mainnet", doMSIG = false, txnType = ETHTxnTypes.TokenTransfer
 
@@ -48,11 +49,12 @@ const options: IOptionBag = {
 -- Note that the 1st parameter passed to PluginChainFactory is an array of plugins loaded by the user. 
 */
 import { PluginChainFactory } from '@open-rights-exchange/chain-js'
-import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
+// import { Plugin as EOSPlugin} from '@open-rights-exchange/chain-js-plugin-eos'
 import { Plugin as EthereumPlugin, ModelsEthereum, HelpersEthereum, GnosisSafeMultisigPlugin, EthereumTransaction, MultisigPlugin} from '@open-rights-exchange/chain-js-plugin-ethereum'
-import { Plugin as AlorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
+// import { Plugin as AlgorandPlugin} from '@open-rights-exchange/chain-js-plugin-algorand'
 import { Transaction } from '@open-rights-exchange/chain-js';
-var chain = PluginChainFactory([EOSPlugin, EthereumPlugin, AlorandPlugin], options.chainType, options.endpoints, options.chainSettings);
+import { SignString } from '../../chain-js/src/interfaces'
+var chain = PluginChainFactory([EthereumPlugin], options.chainType, options.endpoints, options.chainSettings);
 
 async function runTxn() {
 
@@ -70,7 +72,13 @@ async function runTxn() {
         //If txnType is tokentransfer we use our generic code. Else we setup the transaction using one of the custom
         if(txnType.toString() == "tokentransfer") {
     
-            transaction = await chain.new.Transaction(options.defaultTransactionOptions);
+            console.log('options.defaultTransactionOptions')
+            console.log(options.defaultTransactionOptions)
+            let moreOptions = {signMethod : 'etherum.sign-typed-data'}
+            let extOptions = {...options.defaultTransactionOptions, ...moreOptions}
+            console.log('extOptions')
+            console.log(extOptions)
+            transaction = await chain.new.Transaction(extOptions);
     
             var genericValueTransfer = {
                 fromAccountName: options.fromAccountName,
@@ -194,9 +202,84 @@ async function runTxn() {
 
 }
 
+
+async function runSignMessage() {
+    try {
+
+        const inputMessage = {
+            stringToSign: "Something to sign here"
+        }
+
+        signString = await chain.new.SignString(inputMessage)
+        let validateResult = await signString.validate();
+        if(!validateResult.valid) {
+            console.log('Oh no, it was not valid')
+            console.log(validateResult.message)
+            console.log(validateResult.example)
+        } else {
+            let result = await signString.sign([options.privateKey_singleSign]);
+            console.log(result)
+        }
+
+        if(chain.supportsTypedDataSignature){
+            let signStringOptions = {signMethod : 'ethereum.sign-typed-data'}
+            const eip712_domain = {
+                name: "name",
+                version: "1",
+                verifyingContract: "0xB6Fa4E9B48F6fAcd8746573d8e151175c40121C7",
+                chainId: 1,
+            };
+          
+            const eip712_types = {
+                MyTypeA: [
+                    {name:"sender",type:"address"},
+                    {name:"x",type:"uint"},
+                    {name:"deadline", type:"uint"}
+                ]
+            };
+      
+            var milsec_deadline = Date.now() / 1000 + 100;
+            console.log(milsec_deadline, "milisec");
+            var deadline = parseInt(String(milsec_deadline).slice(0, 10));
+            const x = 5;
+    
+            const input = {
+                version: 4,
+                types: eip712_types,
+                primaryType: "MyTypeA",
+                domain: eip712_domain,
+                message: {
+                    sender: options.fromAccountName,
+                    x,
+                    deadline
+                },
+            }
+
+            var signString : SignString = null;
+
+            signString = await chain.new.SignString(input, signStringOptions)
+            let validateResult = await signString.validate();
+            if(!validateResult.valid) {
+                console.log('Oh no, it was not valid')
+                console.log(validateResult.message)
+                console.log(validateResult.example)
+            } else {
+                let result = await signString.sign([options.privateKey_singleSign]);
+                console.log(result)
+            }
+        }
+
+
+
+    } catch(error) {
+        console.log("There was an error: " + error);
+    }
+}
+
 ;(async () => {
     if(chain) {
         await runTxn()
+        await runSignMessage()
         process.exit()
     }
 })()
